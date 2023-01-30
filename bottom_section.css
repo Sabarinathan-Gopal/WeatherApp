@@ -98,6 +98,10 @@
     align-items: center;
     justify-content: center;
 }
+.citydetail-box1:hover{
+    background: linear-gradient(rgba(27, 26, 26, 0.5), rgba(27, 26, 26, 0.5));
+    
+}
 .citydetail-box1{
     background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),gray;
     height:70%;
