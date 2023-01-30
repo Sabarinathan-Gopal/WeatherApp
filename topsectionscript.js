@@ -35,9 +35,31 @@ function totalCityWeather(cities) {
     document.getElementById("value-style2").innerText = "F";
   } else {
     clearInterval(timer);
+    errorDisplay();
   }
 }
-
+function errorDisplay() {
+  let errorItem = document.getElementsByClassName("error-validation");
+  let errorImage = document.getElementsByClassName("weather-img");
+  optionBox.setAttribute("style", "border-color:red");
+  for (let i = 0; i < errorItem.length; i++) {
+    errorItem[i].innerHTML = "NIL";
+  }
+  for (let i = 0; i < errorImage.length; i++) {
+    errorImage[i].src =
+      "./Assets/HTML & CSS/General Images & Icons/warning.svg";
+  }
+  document.getElementById("value-style1").innerText = "";
+  document.getElementById("value-style2").innerText = "";
+  document.getElementById("time-state").src =
+    "./Assets/HTML & CSS/General Images & Icons/warning.svg";
+  document
+    .getElementById("city-seperate-image")
+    .setAttribute(
+      "style",
+      "background-image: url('./Assets/HTML & CSS/General Images & Icons/warning.svg')"
+    );
+}
 function topSector(cities) {
   var tempCelsius = document.getElementById("temperature-celsius");
   var tempFarenheit = document.getElementById("temperature-farenheit");
@@ -136,6 +158,7 @@ function tempFunction(currentHour, cities) {
     } else {
       timelog.innerText = Number(currentHour) + (i + 1) - 12 + "PM";
     }
+
     if (i == 4) {
       var temphour = document.getElementById("time" + i);
       temphour.innerText = 2;
