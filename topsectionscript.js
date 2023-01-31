@@ -1,7 +1,8 @@
 var date = new Date().toJSON();
 let timer;
 var optionBox = document.getElementById("city-option");
-//usage:
+//usage
+
 (function ifeStart() {
   optionBox.addEventListener("change", myFunction);
   function myFunction() {
@@ -20,6 +21,12 @@ window.onload = function () {
   }
   totalCityWeather("Nome");
 };
+
+/**
+ *To check whether the city selected is present in the JS file
+ *Calling the function topSector to perform the remaining functions
+ * @param {string} cities
+ */
 function totalCityWeather(cities) {
   cities = cities.toLowerCase();
   let found = false;
@@ -38,6 +45,10 @@ function totalCityWeather(cities) {
     errorDisplay();
   }
 }
+
+/**
+ *To display validation if invalid cities entered in datalist
+ */
 function errorDisplay() {
   let errorItem = document.getElementsByClassName("error-validation");
   let errorImage = document.getElementsByClassName("weather-img");
@@ -60,6 +71,12 @@ function errorDisplay() {
       "background-image: url('./Assets/HTML & CSS/General Images & Icons/warning.svg')"
     );
 }
+
+/**
+ *To set DOM functions to the respective div elements
+ *To assign city details with the help of the JS file
+ * @param {string} cities
+ */
 function topSector(cities) {
   var tempCelsius = document.getElementById("temperature-celsius");
   var tempFarenheit = document.getElementById("temperature-farenheit");
@@ -78,6 +95,9 @@ function topSector(cities) {
   var currentDate = document.getElementById("date-log");
   var currentHours;
   var currentTimezone;
+  /**
+   *Allows the system to take the current time of the selected city using timezone
+   */
   function mytimer() {
     currentTimezone = new Date().toLocaleString("en-US", {
       timeZone: totalJsonfile[cities].timeZone,
@@ -143,6 +163,11 @@ function topSector(cities) {
   tempFunction(currentHour, cities);
 }
 
+/**
+ *To set the timestamp for the next five hours
+ * @param {Number} currentHour
+ * @param {string} cities
+ */
 function tempFunction(currentHour, cities) {
   for (let i = 0; i < 5; i++) {
     var timelog = document.getElementById("timelog" + i);
@@ -174,6 +199,11 @@ function tempFunction(currentHour, cities) {
   }
 }
 
+/**
+ *To set the current weather icon for the next five hours
+ * @param {*} temperature
+ * @param {*} currentImage
+ */
 function tempImage(temperature, currentImage) {
   if (temperature >= 23 && temperature <= 29) {
     currentImage.src = "./Assets/HTML & CSS/Weather Icons/cloudyIcon.svg";
