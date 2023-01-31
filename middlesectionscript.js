@@ -1,7 +1,9 @@
 var summerCountries = [];
+var winterCountries = [];
 var numberOption = document.getElementById("number-option");
 var currentInputValue = 3;
 var currentSummerValue = 0;
+var currentWinterValue = 0;
 var elementCard = document.querySelector("#city-card0");
 let timer1;
 numberOption.addEventListener("change", getNumberValue);
@@ -31,11 +33,12 @@ numberOption.addEventListener("change", getNumberValue);
     var clone = elementCard.cloneNode(true);
     clone.id = "city-card" + j;
     document.getElementById("total-cards").appendChild(clone);
-    midcardUpdateValues(clone, summerCountries, j, icon);
+    midcardUpdateValues(clone, summerCountries, j,icon);
   }
   currentSummerValue = currentInputValue;
   cardAlignment(currentInputValue, summerCountries.length);
 })();
+
 
 /**
  *To store the current Input number
@@ -50,12 +53,30 @@ function getNumberValue() {
     "border-bottom-style: solid"
   ) {
     summerFunction();
+  } else if (
+    document
+      .getElementById("icon2")
+      .getAttribute("style", "border-bottom-style") ==
+    "border-bottom-style: solid"
+  ) {
+    winterFunction();
+  }
+  if (
+    document
+      .getElementById("icon3")
+      .getAttribute("style", "border-bottom-style") ==
+    "border-bottom-style: solid"
+  ) {
+    rainyFunction();
   }
 }
 
 document
   .getElementById("icon1")
   .addEventListener("click", () => summerFunction());
+document
+  .getElementById("icon2")
+  .addEventListener("click", () => winterFunction());
 document
   .getElementById("scroll1")
   .addEventListener("click", () => midScroll(-29));
@@ -67,6 +88,7 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+
 /**
  *Performing scroll operations
  * @param {Number} val
@@ -77,6 +99,7 @@ async function midScroll(val) {
     document.getElementById("card-container").scrollLeft += val;
   }
 }
+
 
 /**
  *Sort out cities according to the summer weather
@@ -153,6 +176,84 @@ function summerFunction() {
   cardAlignment(currentInputValue, summerCountries.length);
 }
 
+
+/**
+ *Sort out cities according to the winter weather
+ */
+function winterFunction() {
+  var icon = "snowflakeIcon";
+  winterCountries = Object.values(totalJsonfile).filter(
+    (city) =>
+      Number(city.precipitation.substring(0, city.precipitation.length - 1)) <
+        50 &&
+      Number(city.humidity.substring(0, city.humidity.length - 1)) > 50 &&
+      Number(city.temperature.substring(0, city.temperature.length - 2)) >=
+        20 &&
+      Number(city.temperature.substring(0, city.temperature.length - 2)) <= 28
+  );
+  winterCountries.sort((a, b) => {
+    return b.precipitation - a.precipitation;
+  });
+  document.getElementById("total-cards").replaceChildren();
+  clearBorder();
+  document
+    .getElementById("icon2")
+    .setAttribute("style", "border-bottom-style: solid");
+  if (winterCountries.length >= 3) {
+    if (currentWinterValue < currentInputValue) {
+      if (winterCountries.length <= currentInputValue) {
+        document.getElementById("total-cards").replaceChildren();
+        document
+          .getElementById("icon2")
+          .setAttribute("style", "border-bottom-style: solid");
+        for (let j = 0; j < winterCountries.length; j++) {
+          var clone = elementCard.cloneNode(true);
+          clone.id = "city-card" + j;
+          document.getElementById("total-cards").appendChild(clone);
+          midcardUpdateValues(clone, winterCountries, j, icon);
+        }
+      } else {
+        document.getElementById("total-cards").replaceChildren();
+        document
+          .getElementById("icon2")
+          .setAttribute("style", "border-bottom-style: solid");
+        for (let j = 0; j < currentInputValue; j++) {
+          var clone = elementCard.cloneNode(true);
+          clone.id = "city-card" + j;
+          document.getElementById("total-cards").appendChild(clone);
+          midcardUpdateValues(clone, winterCountries, j, icon);
+        }
+        currentWinterValue = currentInputValue;
+      }
+    } else if (currentWinterValue > currentInputValue) {
+      document.getElementById("total-cards").replaceChildren();
+      for (let j = 0; j < currentInputValue; j++) {
+        var clone = elementCard.cloneNode(true);
+        clone.id = "city-card" + j;
+        document.getElementById("total-cards").appendChild(clone);
+        midcardUpdateValues(clone, winterCountries, j, icon);
+      }
+      currentWinterValue = currentInputValue;
+    } else if (currentWinterValue == currentInputValue) {
+      for (let i = 0; i < currentWinterValue; i++) {
+        var clone = elementCard.cloneNode(true);
+        clone.id = "city-card" + i;
+        document.getElementById("total-cards").appendChild(clone);
+        midcardUpdateValues(clone, winterCountries, i, icon);
+      }
+    }
+  } else if (winterCountries.length < 3) {
+    for (let j = 0; j < winterCountries.length; j++) {
+      var clone = elementCard.cloneNode(true);
+      clone.id = "city-card" + j;
+      document.getElementById("total-cards").appendChild(clone);
+      midcardUpdateValues(clone, winterCountries, j, icon);
+    }
+    currentWinterValue = winterCountries.length;
+  }
+  cardAlignment(currentInputValue, winterCountries.length);
+}
+
 /**
  *To hide the scroll image if the city list is less than the expected number
  * @param {Number} numberOption
@@ -192,6 +293,7 @@ function cardAlignment(numberOption, countryLength) {
   }
 }
 
+
 /**
  *To clear the previous selected border of the icons
  */
@@ -202,6 +304,7 @@ function clearBorder() {
       .setAttribute("style", "border-bottom-style: none");
   }
 }
+
 
 /**
  *Updating the values of the current city boxes during runtime
