@@ -1,9 +1,11 @@
 var summerCountries = [];
 var winterCountries = [];
+var rainyCountries = [];
 var numberOption = document.getElementById("number-option");
 var currentInputValue = 3;
 var currentSummerValue = 0;
 var currentWinterValue = 0;
+var currentRainyValue = 0;
 var elementCard = document.querySelector("#city-card0");
 let timer1;
 numberOption.addEventListener("change", getNumberValue);
@@ -77,6 +79,9 @@ document
 document
   .getElementById("icon2")
   .addEventListener("click", () => winterFunction());
+document
+  .getElementById("icon3")
+  .addEventListener("click", () => rainyFunction());
 document
   .getElementById("scroll1")
   .addEventListener("click", () => midScroll(-29));
@@ -253,6 +258,80 @@ function winterFunction() {
   }
   cardAlignment(currentInputValue, winterCountries.length);
 }
+
+
+/**
+ *Sort out cities according to the rainy weather
+ */
+function rainyFunction() {
+  var icon = "rainyIcon";
+  rainyCountries = Object.values(totalJsonfile).filter(
+    (city) =>
+      Number(city.humidity.substring(0, city.humidity.length - 1)) >= 50 &&
+      Number(city.temperature.substring(0, city.temperature.length - 2)) < 20
+  );
+  rainyCountries.sort((a, b) => {
+    return b.humidity - a.humidity;
+  });
+  document.getElementById("total-cards").replaceChildren();
+  clearBorder();
+  document
+    .getElementById("icon3")
+    .setAttribute("style", "border-bottom-style: solid");
+  if (rainyCountries.length >= 3) {
+    if (currentRainyValue < currentInputValue) {
+      if (rainyCountries.length <= currentInputValue) {
+        document.getElementById("total-cards").replaceChildren();
+        document
+          .getElementById("icon3")
+          .setAttribute("style", "border-bottom-style: solid");
+        for (let j = 0; j < rainyCountries.length; j++) {
+          var clone = elementCard.cloneNode(true);
+          clone.id = "city-card" + j;
+          document.getElementById("total-cards").appendChild(clone);
+          midcardUpdateValues(clone, rainyCountries, j, icon);
+        }
+      } else {
+        document.getElementById("total-cards").replaceChildren();
+        document
+          .getElementById("icon3")
+          .setAttribute("style", "border-bottom-style: solid");
+        for (let j = 0; j < currentInputValue; j++) {
+          var clone = elementCard.cloneNode(true);
+          clone.id = "city-card" + j;
+          document.getElementById("total-cards").appendChild(clone);
+          midcardUpdateValues(clone, rainyCountries, j, icon);
+        }
+        currentRainyValue = currentInputValue;
+      }
+    } else if (currentRainyValue > currentInputValue) {
+      for (let j = 0; j < currentInputValue; j++) {
+        var clone = elementCard.cloneNode(true);
+        clone.id = "city-card" + j;
+        document.getElementById("total-cards").appendChild(clone);
+        midcardUpdateValues(clone, rainyCountries, j, icon);
+      }
+      currentRainyValue = currentInputValue;
+    } else if (currentRainyValue == currentInputValue) {
+      for (let i = 0; i < currentRainyValue; i++) {
+        var clone = elementCard.cloneNode(true);
+        clone.id = "city-card" + i;
+        document.getElementById("total-cards").appendChild(clone);
+        midcardUpdateValues(clone, rainyCountries, i, icon);
+      }
+    }
+  } else if (rainyCountries.length < 3) {
+    for (let j = 0; j < rainyCountries.length; j++) {
+      var clone = elementCard.cloneNode(true);
+      clone.id = "city-card" + j;
+      document.getElementById("total-cards").appendChild(clone);
+      midcardUpdateValues(clone, rainyCountries, j, icon);
+    }
+    currentRainyValue = rainyCountries.length;
+  }
+  cardAlignment(currentInputValue, rainyCountries.length);
+}
+
 
 /**
  *To hide the scroll image if the city list is less than the expected number
