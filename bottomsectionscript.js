@@ -25,6 +25,10 @@ document
       break;
     }
   }
+  topCountries = topCountries.sort((a, b) =>
+    b.timeZone.split("/")[0].localeCompare(a.timeZone.split("/")[0])
+  );
+  topCountries = tempSort(topCountries, currentTemperatureArrow);
   updateWithSort(topCountries);
 })();
 
@@ -33,10 +37,12 @@ function continentSort() {
     currentContinentArrow = "arrowUp";
     document.getElementById("continent-arrow").src =
       "./Assets/HTML & CSS/General Images & Icons/arrowUp.svg";
+    Sort(currentContinentArrow, currentTemperatureArrow);
   } else if (currentContinentArrow == "arrowUp") {
     currentContinentArrow = "arrowDown";
     document.getElementById("continent-arrow").src =
       "./Assets/HTML & CSS/General Images & Icons/arrowDown.svg";
+    Sort(currentContinentArrow, currentTemperatureArrow);
   }
 }
 
@@ -45,13 +51,82 @@ function temperatureSort() {
     currentTemperatureArrow = "arrowDown";
     document.getElementById("temperature-arrow").src =
       "./Assets/HTML & CSS/General Images & Icons/arrowDown.svg";
+    Sort(currentContinentArrow, currentTemperatureArrow);
   } else if (currentTemperatureArrow == "arrowDown") {
     currentTemperatureArrow = "arrowUp";
     document.getElementById("temperature-arrow").src =
       "./Assets/HTML & CSS/General Images & Icons/arrowUp.svg";
+    Sort(currentContinentArrow, currentTemperatureArrow);
   }
 }
 
+function Sort(currentContinentArrow, currentTemperatureArrow) {
+  if (
+    (currentContinentArrow == "arrowDown" &&
+      currentTemperatureArrow == "arrowDown") ||
+    (currentContinentArrow == "arrowDown" &&
+      currentTemperatureArrow == "arrowUp")
+  ) {
+    topCountries = topCountries.sort((a, b) =>
+      b.timeZone.split("/")[0].localeCompare(a.timeZone.split("/")[0])
+    );
+    topCountries = tempSort(topCountries, currentTemperatureArrow);
+    updateWithSort(topCountries);
+  } else if (
+    (currentContinentArrow == "arrowUp" &&
+      currentTemperatureArrow == "arrowUp") ||
+    (currentContinentArrow == "arrowUp" &&
+      currentTemperatureArrow == "arrowDown")
+  ) {
+    topCountries = topCountries.sort((a, b) =>
+      a.timeZone.split("/")[0].localeCompare(b.timeZone.split("/")[0])
+    );
+    topCountries = tempSort(topCountries, currentTemperatureArrow);
+    updateWithSort(topCountries);
+  }
+}
+
+function tempSort(topCountries, tempArrow) {
+  if (tempArrow == "arrowDown") {
+    topCountries.sort(function (a, b) {
+      if (a.timeZone.split("/")[0] == b.timeZone.split("/")[0]) {
+        if (
+          Number(a.temperature.split("°C")[0]) <
+          Number(b.temperature.split("°C")[0])
+        ) {
+          return 1;
+        }
+        if (
+          Number(a.temperature.split("°C")[0]) >
+          Number(b.temperature.split("°C")[0])
+        ) {
+          return -1;
+        }
+        return 0;
+      }
+    });
+    return topCountries;
+  } else if (tempArrow == "arrowUp") {
+    topCountries.sort(function (a, b) {
+      if (a.timeZone.split("/")[0] == b.timeZone.split("/")[0]) {
+        if (
+          Number(a.temperature.split("°C")[0]) >
+          Number(b.temperature.split("°C")[0])
+        ) {
+          return 1;
+        }
+        if (
+          Number(a.temperature.split("°C")[0]) <
+          Number(b.temperature.split("°C")[0])
+        ) {
+          return -1;
+        }
+        return 0;
+      }
+    });
+    return topCountries;
+  }
+}
 function updateWithSort(currentList) {
   document.getElementById("thirdcontainer-city").replaceChildren();
   i = 0;
@@ -69,6 +144,13 @@ function updateWithSort(currentList) {
   }
 }
 
+/**
+ *Updating the values of the current city boxes during runtime
+ * @param {Number} val
+ * @param {list} currentCountry
+ * @param {Number} index
+ * @param {string} icon
+ */
 function midcardUpdateValues(val, currentCountry) {
   var currentCity = totalJsonfile[currentCountry].cityName.toLowerCase();
   val.querySelector("#thirdcontainer-continent").innerText = totalJsonfile[
@@ -99,7 +181,8 @@ function midcardUpdateValues(val, currentCountry) {
     }
     val.querySelector("#thirdcontainer-country").innerText =
       totalJsonfile[currentCountry].cityName +
-      "," + ' ' +
+      "," +
+      " " +
       (currentHours < 10 ? "0" + currentHours : currentHours) +
       ":" +
       (new Date(currentTimezone).getMinutes() < 10
