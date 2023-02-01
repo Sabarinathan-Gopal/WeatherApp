@@ -32,6 +32,9 @@ document
   updateWithSort(topCountries);
 })();
 
+/**
+ *To change the arrow when the continent arrows are clicked
+ */
 function continentSort() {
   if (currentContinentArrow == "arrowDown") {
     currentContinentArrow = "arrowUp";
@@ -46,6 +49,9 @@ function continentSort() {
   }
 }
 
+/**
+ *To change the arrow when the temperature arrows are clicked
+ */
 function temperatureSort() {
   if (currentTemperatureArrow == "arrowUp") {
     currentTemperatureArrow = "arrowDown";
@@ -60,6 +66,12 @@ function temperatureSort() {
   }
 }
 
+/**
+ *To sort the continents according to the requirement
+ *Redirecting to the temperature sort function
+ * @param {string} currentContinentArrow
+ * @param {string} currentTemperatureArrow
+ */
 function Sort(currentContinentArrow, currentTemperatureArrow) {
   if (
     (currentContinentArrow == "arrowDown" &&
@@ -86,6 +98,13 @@ function Sort(currentContinentArrow, currentTemperatureArrow) {
   }
 }
 
+/**
+ *To sort the cards based on the temperature
+ *Temperature sort done and the sorted list returned to the update function
+ * @param {List} topCountries
+ * @param {string} tempArrow
+ * @return {List}
+ */
 function tempSort(topCountries, tempArrow) {
   if (tempArrow == "arrowDown") {
     topCountries.sort(function (a, b) {
@@ -127,6 +146,11 @@ function tempSort(topCountries, tempArrow) {
     return topCountries;
   }
 }
+
+/**
+ *sorting the cards accordingly to the div
+ * @param {list} currentList
+ */
 function updateWithSort(currentList) {
   document.getElementById("thirdcontainer-city").replaceChildren();
   i = 0;
