@@ -1,9 +1,15 @@
 let currentContinentArrow = "arrowDown";
 let currentTemperatureArrow = "arrowUp";
 let i = 0;
-var elementCard = document.querySelector("#continent-box0");
+var bottomElementCard = document.querySelector("#continent-box0");
 let topCountries = Object.values(totalJsonfile);
 let timer2;
+let bottomSectionObj;
+
+let bottomSectionValues = function () {};
+bottomSectionValues.prototype = new cityFunction();
+bottomSectionObj = new bottomSectionValues();
+
 document
   .getElementById("continent-arrow")
   .addEventListener("click", () => continentSort());
@@ -13,18 +19,6 @@ document
 
 (function () {
   document.getElementById("thirdcontainer-city").replaceChildren();
-  i = 0;
-  for (let element in totalJsonfile) {
-    if (i < 12) {
-      var clone = elementCard.cloneNode(true);
-      clone.id = "continent-box" + i;
-      document.getElementById("thirdcontainer-city").appendChild(clone);
-      midcardUpdateValues(clone, element);
-      i++;
-    } else {
-      break;
-    }
-  }
   topCountries = topCountries.sort((a, b) =>
     b.timeZone.split("/")[0].localeCompare(a.timeZone.split("/")[0])
   );
@@ -156,11 +150,11 @@ function updateWithSort(currentList) {
   i = 0;
   for (let element in currentList) {
     if (i < 12) {
-      var clone = elementCard.cloneNode(true);
-      clone.id = "continent-box" + i;
-      document.getElementById("thirdcontainer-city").appendChild(clone);
+      var clone1 = bottomElementCard.cloneNode(true);
+      clone1.id = "continent-box" + i;
+      document.getElementById("thirdcontainer-city").appendChild(clone1);
       element = currentList[element].cityName.toLowerCase();
-      midcardUpdateValues(clone, element);
+      bottomCardUpdateValues(clone1, element);
       i++;
     } else {
       break;
@@ -175,15 +169,25 @@ function updateWithSort(currentList) {
  * @param {Number} index
  * @param {string} icon
  */
-function midcardUpdateValues(val, currentCountry) {
-  var currentCity = totalJsonfile[currentCountry].cityName.toLowerCase();
+function bottomCardUpdateValues(val, currentCountry) {
+  let currentCityName;
+  let presentTimeZone;
+  bottomSectionObj.setCityName(totalJsonfile[currentCountry].cityName);
+  bottomSectionObj.setTemperature(totalJsonfile[currentCountry].temperature);
+  bottomSectionObj.setHumidity(totalJsonfile[currentCountry].humidity);
+  bottomSectionObj.setPrecipitation(
+    totalJsonfile[currentCountry].precipitation
+  );
+  var currentCity = bottomSectionObj.getCityName().toLowerCase();
   val.querySelector("#thirdcontainer-continent").innerText = totalJsonfile[
     currentCity
   ].timeZone.substring(0, totalJsonfile[currentCity].timeZone.indexOf("/"));
+  currentCityName = bottomSectionObj.getCityName();
+  presentTimeZone = bottomSectionObj.getTimeZone();
   val.querySelector("#thirdcontainer-temperature").innerText =
-    totalJsonfile[currentCity].temperature;
+    bottomSectionObj.getTemperature();
   val.querySelector("#thirdcontainer-humidity").innerText =
-    totalJsonfile[currentCity].humidity;
+    bottomSectionObj.getHumidity();
   var currentHours;
   var currentTimezone;
   var timestamp;
@@ -192,19 +196,17 @@ function midcardUpdateValues(val, currentCountry) {
   timer2 = setInterval(mytimer2, 500);
   function mytimer2() {
     currentTimezone = new Date().toLocaleString("en-US", {
-      timeZone: totalJsonfile[currentCity].timeZone,
+      timeZone: presentTimeZone,
     });
     currentHours = new Date(currentTimezone).getHours() % 12;
-    if (new Date(currentTimezone).getHours() >= 12) {
-      timestamp = "PM";
-    } else {
-      timestamp = "AM";
-    }
+    timestamp = bottomSectionObj.getTimeStamp(
+      new Date(currentTimezone).getHours()
+    );
     if (currentHours == 0) {
       currentHours = 12;
     }
     val.querySelector("#thirdcontainer-country").innerText =
-      totalJsonfile[currentCountry].cityName +
+      currentCityName +
       "," +
       " " +
       (currentHours < 10 ? "0" + currentHours : currentHours) +

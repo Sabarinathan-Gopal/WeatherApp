@@ -1,15 +1,22 @@
 var summerCountries = [];
 var winterCountries = [];
 var rainyCountries = [];
+var displayList = [];
 var numberOption = document.getElementById("number-option");
 var currentInputValue = 3;
 var currentSummerValue = 0;
 var currentWinterValue = 0;
 var currentRainyValue = 0;
-var elementCard = document.querySelector("#city-card0");
+var elementCard = document.getElementById("city-card0");
 let timer1;
-numberOption.addEventListener("change", getNumberValue);
+let middleSectionObj;
 
+let middleSectionValues = function () {};
+middleSectionValues.prototype = new cityFunction();
+middleSectionObj = new middleSectionValues();
+
+numberOption.addEventListener("change", getNumberValue);
+window.addEventListener("resize", resizeChange);
 (function () {
   var icon = "sunnyIcon";
   summerCountries = Object.values(totalJsonfile).filter(
@@ -35,12 +42,12 @@ numberOption.addEventListener("change", getNumberValue);
     var clone = elementCard.cloneNode(true);
     clone.id = "city-card" + j;
     document.getElementById("total-cards").appendChild(clone);
-    midcardUpdateValues(clone, summerCountries, j,icon);
+    midcardUpdateValues(clone, summerCountries, j, icon);
   }
   currentSummerValue = currentInputValue;
-  cardAlignment(currentInputValue, summerCountries.length);
+  displayList = summerCountries;
+  resizeChange();
 })();
-
 
 /**
  *To store the current Input number
@@ -71,6 +78,7 @@ function getNumberValue() {
   ) {
     rainyFunction();
   }
+  resizeChange();
 }
 
 document
@@ -93,7 +101,6 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-
 /**
  *Performing scroll operations
  * @param {Number} val
@@ -105,11 +112,11 @@ async function midScroll(val) {
   }
 }
 
-
 /**
  *Sort out cities according to the summer weather
  */
 function summerFunction() {
+  resizeChange();
   var icon = "sunnyIcon";
   summerCountries = Object.values(totalJsonfile).filter(
     (city) =>
@@ -178,9 +185,8 @@ function summerFunction() {
     }
     currentSummerValue = summerCountries.length;
   }
-  cardAlignment(currentInputValue, summerCountries.length);
+  displayList = summerCountries;
 }
-
 
 /**
  *Sort out cities according to the winter weather
@@ -256,9 +262,9 @@ function winterFunction() {
     }
     currentWinterValue = winterCountries.length;
   }
-  cardAlignment(currentInputValue, winterCountries.length);
+  displayList = winterCountries;
+  resizeChange();
 }
-
 
 /**
  *Sort out cities according to the rainy weather
@@ -329,49 +335,9 @@ function rainyFunction() {
     }
     currentRainyValue = rainyCountries.length;
   }
-  cardAlignment(currentInputValue, rainyCountries.length);
+  displayList = rainyCountries;
+  resizeChange();
 }
-
-
-/**
- *To hide the scroll image if the city list is less than the expected number
- * @param {Number} numberOption
- * @param {Number} countryLength
- */
-function cardAlignment(numberOption, countryLength) {
-  if (numberOption <= 4 && countryLength > 4) {
-    document
-      .getElementById("total-cards")
-      .setAttribute("style", "justify-content: center");
-    document
-      .getElementById("scroll1")
-      .setAttribute("style", "visibility: hidden");
-    document
-      .getElementById("scroll2")
-      .setAttribute("style", "visibility: hidden");
-  } else if (countryLength <= 4) {
-    document
-      .getElementById("total-cards")
-      .setAttribute("style", "justify-content: center");
-    document
-      .getElementById("scroll1")
-      .setAttribute("style", "visibility: hidden");
-    document
-      .getElementById("scroll2")
-      .setAttribute("style", "visibility: hidden");
-  } else {
-    document
-      .getElementById("scroll1")
-      .setAttribute("style", "visibility: visible");
-    document
-      .getElementById("scroll2")
-      .setAttribute("style", "visibility: visible");
-    document
-      .getElementById("total-cards")
-      .setAttribute("style", "justify-content: normal");
-  }
-}
-
 
 /**
  *To clear the previous selected border of the icons
@@ -384,7 +350,6 @@ function clearBorder() {
   }
 }
 
-
 /**
  *Updating the values of the current city boxes during runtime
  * @param {Number} val
@@ -393,7 +358,11 @@ function clearBorder() {
  * @param {string} icon
  */
 function midcardUpdateValues(val, currentCountry, index, icon) {
-  var currentCity = currentCountry[index].cityName.toLowerCase();
+  middleSectionObj.setCityName(currentCountry[index].cityName);
+  middleSectionObj.setTemperature(currentCountry[index].temperature);
+  middleSectionObj.setHumidity(currentCountry[index].humidity);
+  middleSectionObj.setPrecipitation(currentCountry[index].precipitation);
+  var currentCity = middleSectionObj.getCityName().toLowerCase();
   val
     .querySelector("#city-card-image")
     .setAttribute(
@@ -405,9 +374,9 @@ function midcardUpdateValues(val, currentCountry, index, icon) {
   val.querySelector("#middle-temp-icon").src =
     "./Assets/HTML & CSS/Weather Icons/" + icon + ".svg";
   val.querySelector("#middle-city-name").innerText =
-    currentCountry[index].cityName;
+    middleSectionObj.getCityName();
   val.querySelector("#middle-temperature").innerText =
-    currentCountry[index].temperature;
+    middleSectionObj.getTemperature();
   var currentHours;
   var currentTimezone;
   var timestamp;
@@ -415,15 +384,14 @@ function midcardUpdateValues(val, currentCountry, index, icon) {
   clearInterval(timer1);
   timer1 = setInterval(mytimer1, 500);
   function mytimer1() {
+    middleSectionObj.setTimeZone(totalJsonfile[currentCity].timeZone);
     currentTimezone = new Date().toLocaleString("en-US", {
-      timeZone: totalJsonfile[currentCity].timeZone,
+      timeZone: middleSectionObj.getTimeZone(),
     });
     currentHours = new Date(currentTimezone).getHours() % 12;
-    if (new Date(currentTimezone).getHours() >= 12) {
-      timestamp = "PM";
-    } else {
-      timestamp = "AM";
-    }
+    timestamp = middleSectionObj.getTimeStamp(
+      new Date(currentTimezone).getHours()
+    );
     const date = new Date(currentTimezone).getDate();
     val.querySelector("#middle-city-date").innerText =
       (date < 10 ? "0" + date : date) +
@@ -450,7 +418,39 @@ function midcardUpdateValues(val, currentCountry, index, icon) {
     clearInterval(timer1);
   }
   val.querySelector("#middle-humidity").innerText =
-    currentCountry[index].humidity;
+    middleSectionObj.getHumidity();
   val.querySelector("#middle-precipitation").innerText =
-    currentCountry[index].precipitation;
+    middleSectionObj.getPrecipitation();
+}
+
+/**
+ *To hide the scroll image if the city list is less than the expected number
+ * @param {Number} numberOption
+ * @param {Number} countryLength
+ */
+function resizeChange() {
+  let cardWidth = document.getElementById("card-container").clientWidth;
+  let cardCount = displayList.length;
+  let count = cardCount < currentInputValue ? cardCount : currentInputValue;
+  if (cardWidth < count * 280 + 20) {
+    document
+      .getElementById("total-cards")
+      .setAttribute("style", "justify-content: none");
+    document
+      .getElementById("scroll1")
+      .setAttribute("style", "visibility:visible");
+    document
+      .getElementById("scroll2")
+      .setAttribute("style", "visibility:visible");
+  } else {
+    document
+      .getElementById("total-cards")
+      .setAttribute("style", "justify-content: center");
+    document
+      .getElementById("scroll1")
+      .setAttribute("style", "visibility:hidden");
+    document
+      .getElementById("scroll2")
+      .setAttribute("style", "visibility:hidden");
+  }
 }
