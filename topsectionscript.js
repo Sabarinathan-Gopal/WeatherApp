@@ -111,8 +111,8 @@ window.onload = function () {
 function totalCityWeather(cities) {
   cities = cities.toLowerCase();
   let found = false;
-  for (let city in totalJsonfile) {
-    if (cities === city) {
+  for (let value in totalJsonfile) {
+    if (cities === value) {
       found = true;
     }
   }

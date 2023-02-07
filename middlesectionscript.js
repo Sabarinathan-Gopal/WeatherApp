@@ -38,11 +38,11 @@ window.addEventListener("resize", resizeChange);
   document
     .getElementById("icon1")
     .setAttribute("style", "border-bottom-style: solid");
-  for (let j = 0; j < currentInputValue; j++) {
+  for (let valuej = 0; valuej < currentInputValue; valuej++) {
     var clone = elementCard.cloneNode(true);
-    clone.id = "city-card" + j;
+    clone.id = "city-card" + valuej;
     document.getElementById("total-cards").appendChild(clone);
-    midcardUpdateValues(clone, summerCountries, j, icon);
+    midcardUpdateValues(clone, summerCountries, valuej, icon);
   }
   currentSummerValue = currentInputValue;
   displayList = summerCountries;
@@ -58,14 +58,14 @@ function getNumberValue() {
   if (
     document
       .getElementById("icon1")
-      .getAttribute("style", "border-bottom-style") ==
+      .getAttribute("style", "border-bottom-style") ===
     "border-bottom-style: solid"
   ) {
     summerFunction();
   } else if (
     document
       .getElementById("icon2")
-      .getAttribute("style", "border-bottom-style") ==
+      .getAttribute("style", "border-bottom-style") ===
     "border-bottom-style: solid"
   ) {
     winterFunction();
@@ -73,7 +73,7 @@ function getNumberValue() {
   if (
     document
       .getElementById("icon3")
-      .getAttribute("style", "border-bottom-style") ==
+      .getAttribute("style", "border-bottom-style") ===
     "border-bottom-style: solid"
   ) {
     rainyFunction();
@@ -106,7 +106,7 @@ function sleep(ms) {
  * @param {Number} val
  */
 async function midScroll(val) {
-  for (let i = 0; i < 10; i++) {
+  for (let valuei = 0; valuei < 10; valuei++) {
     await sleep(60);
     document.getElementById("card-container").scrollLeft += val;
   }
@@ -140,48 +140,48 @@ function summerFunction() {
         document
           .getElementById("icon1")
           .setAttribute("style", "border-bottom-style: solid");
-        for (let j = 0; j < summerCountries.length; j++) {
+        for (let valuej = 0; valuej < summerCountries.length; valuej++) {
           var clone = elementCard.cloneNode(true);
-          clone.id = "city-card" + j;
+          clone.id = "city-card" + valuej;
           document.getElementById("total-cards").appendChild(clone);
-          midcardUpdateValues(clone, summerCountries, j, icon);
+          midcardUpdateValues(clone, summerCountries, valuej, icon);
         }
       } else {
         document.getElementById("total-cards").replaceChildren();
         document
           .getElementById("icon1")
           .setAttribute("style", "border-bottom-style: solid");
-        for (let j = 0; j < currentInputValue; j++) {
+        for (let valuej = 0; valuej < currentInputValue; valuej++) {
           var clone = elementCard.cloneNode(true);
-          clone.id = "city-card" + j;
+          clone.id = "city-card" + valuej;
           document.getElementById("total-cards").appendChild(clone);
-          midcardUpdateValues(clone, summerCountries, j, icon);
+          midcardUpdateValues(clone, summerCountries, valuej, icon);
         }
         currentSummerValue = currentInputValue;
       }
     } else if (currentSummerValue > currentInputValue) {
       document.getElementById("total-cards").replaceChildren();
-      for (let j = 0; j < currentInputValue; j++) {
+      for (let valuej = 0; valuej < currentInputValue; valuej++) {
         var clone = elementCard.cloneNode(true);
-        clone.id = "city-card" + j;
+        clone.id = "city-card" + valuej;
         document.getElementById("total-cards").appendChild(clone);
-        midcardUpdateValues(clone, summerCountries, j, icon);
+        midcardUpdateValues(clone, summerCountries, valuej, icon);
       }
       currentSummerValue = currentInputValue;
-    } else if (currentSummerValue == currentInputValue) {
-      for (let i = 0; i < currentSummerValue; i++) {
+    } else if (currentSummerValue === currentInputValue) {
+      for (let valuei = 0; valuei < currentSummerValue; valuei++) {
         var clone = elementCard.cloneNode(true);
-        clone.id = "city-card" + i;
+        clone.id = "city-card" + valuei;
         document.getElementById("total-cards").appendChild(clone);
-        midcardUpdateValues(clone, summerCountries, i, icon);
+        midcardUpdateValues(clone, summerCountries, valuei, icon);
       }
     }
   } else if (summerCountries.length < 3) {
-    for (let j = 0; j < summerCountries.length; j++) {
+    for (let valuej = 0; valuej < summerCountries.length; valuej++) {
       var clone = elementCard.cloneNode(true);
-      clone.id = "city-card" + j;
+      clone.id = "city-card" + valuej;
       document.getElementById("total-cards").appendChild(clone);
-      midcardUpdateValues(clone, summerCountries, j, icon);
+      midcardUpdateValues(clone, summerCountries, valuej, icon);
     }
     currentSummerValue = summerCountries.length;
   }
@@ -217,48 +217,48 @@ function winterFunction() {
         document
           .getElementById("icon2")
           .setAttribute("style", "border-bottom-style: solid");
-        for (let j = 0; j < winterCountries.length; j++) {
+        for (let valuej = 0; valuej < winterCountries.length; valuej++) {
           var clone = elementCard.cloneNode(true);
-          clone.id = "city-card" + j;
+          clone.id = "city-card" + valuej;
           document.getElementById("total-cards").appendChild(clone);
-          midcardUpdateValues(clone, winterCountries, j, icon);
+          midcardUpdateValues(clone, winterCountries, valuej, icon);
         }
       } else {
         document.getElementById("total-cards").replaceChildren();
         document
           .getElementById("icon2")
           .setAttribute("style", "border-bottom-style: solid");
-        for (let j = 0; j < currentInputValue; j++) {
+        for (let valuej = 0; valuej < currentInputValue; valuej++) {
           var clone = elementCard.cloneNode(true);
-          clone.id = "city-card" + j;
+          clone.id = "city-card" + valuej;
           document.getElementById("total-cards").appendChild(clone);
-          midcardUpdateValues(clone, winterCountries, j, icon);
+          midcardUpdateValues(clone, winterCountries, valuej, icon);
         }
         currentWinterValue = currentInputValue;
       }
     } else if (currentWinterValue > currentInputValue) {
       document.getElementById("total-cards").replaceChildren();
-      for (let j = 0; j < currentInputValue; j++) {
+      for (let valuej = 0; valuej < currentInputValue; valuej++) {
         var clone = elementCard.cloneNode(true);
-        clone.id = "city-card" + j;
+        clone.id = "city-card" + valuej;
         document.getElementById("total-cards").appendChild(clone);
-        midcardUpdateValues(clone, winterCountries, j, icon);
+        midcardUpdateValues(clone, winterCountries, valuej, icon);
       }
       currentWinterValue = currentInputValue;
-    } else if (currentWinterValue == currentInputValue) {
-      for (let i = 0; i < currentWinterValue; i++) {
+    } else if (currentWinterValue === currentInputValue) {
+      for (let valuei = 0; valuei < currentWinterValue; valuei++) {
         var clone = elementCard.cloneNode(true);
-        clone.id = "city-card" + i;
+        clone.id = "city-card" + valuei;
         document.getElementById("total-cards").appendChild(clone);
-        midcardUpdateValues(clone, winterCountries, i, icon);
+        midcardUpdateValues(clone, winterCountries, valuei, icon);
       }
     }
   } else if (winterCountries.length < 3) {
-    for (let j = 0; j < winterCountries.length; j++) {
+    for (let valuej = 0; valuej < winterCountries.length; valuej++) {
       var clone = elementCard.cloneNode(true);
-      clone.id = "city-card" + j;
+      clone.id = "city-card" + valuej;
       document.getElementById("total-cards").appendChild(clone);
-      midcardUpdateValues(clone, winterCountries, j, icon);
+      midcardUpdateValues(clone, winterCountries, valuej, icon);
     }
     currentWinterValue = winterCountries.length;
   }
@@ -291,47 +291,47 @@ function rainyFunction() {
         document
           .getElementById("icon3")
           .setAttribute("style", "border-bottom-style: solid");
-        for (let j = 0; j < rainyCountries.length; j++) {
+        for (let valuej = 0; valuej < rainyCountries.length; valuej++) {
           var clone = elementCard.cloneNode(true);
-          clone.id = "city-card" + j;
+          clone.id = "city-card" + valuej;
           document.getElementById("total-cards").appendChild(clone);
-          midcardUpdateValues(clone, rainyCountries, j, icon);
+          midcardUpdateValues(clone, rainyCountries, valuej, icon);
         }
       } else {
         document.getElementById("total-cards").replaceChildren();
         document
           .getElementById("icon3")
           .setAttribute("style", "border-bottom-style: solid");
-        for (let j = 0; j < currentInputValue; j++) {
+        for (let valuej = 0; valuej < currentInputValue; valuej++) {
           var clone = elementCard.cloneNode(true);
-          clone.id = "city-card" + j;
+          clone.id = "city-card" + valuej;
           document.getElementById("total-cards").appendChild(clone);
-          midcardUpdateValues(clone, rainyCountries, j, icon);
+          midcardUpdateValues(clone, rainyCountries, valuej, icon);
         }
         currentRainyValue = currentInputValue;
       }
     } else if (currentRainyValue > currentInputValue) {
-      for (let j = 0; j < currentInputValue; j++) {
+      for (let valuej = 0; valuej < currentInputValue; valuej++) {
         var clone = elementCard.cloneNode(true);
-        clone.id = "city-card" + j;
+        clone.id = "city-card" + valuej;
         document.getElementById("total-cards").appendChild(clone);
-        midcardUpdateValues(clone, rainyCountries, j, icon);
+        midcardUpdateValues(clone, rainyCountries, valuej, icon);
       }
       currentRainyValue = currentInputValue;
-    } else if (currentRainyValue == currentInputValue) {
-      for (let i = 0; i < currentRainyValue; i++) {
+    } else if (currentRainyValue === currentInputValue) {
+      for (let valuei = 0; valuei < currentRainyValue; valuei++) {
         var clone = elementCard.cloneNode(true);
-        clone.id = "city-card" + i;
+        clone.id = "city-card" + valuei;
         document.getElementById("total-cards").appendChild(clone);
-        midcardUpdateValues(clone, rainyCountries, i, icon);
+        midcardUpdateValues(clone, rainyCountries, valuei, icon);
       }
     }
   } else if (rainyCountries.length < 3) {
-    for (let j = 0; j < rainyCountries.length; j++) {
+    for (let valuej = 0; valuej < rainyCountries.length; valuej++) {
       var clone = elementCard.cloneNode(true);
-      clone.id = "city-card" + j;
+      clone.id = "city-card" + valuej;
       document.getElementById("total-cards").appendChild(clone);
-      midcardUpdateValues(clone, rainyCountries, j, icon);
+      midcardUpdateValues(clone, rainyCountries, valuej, icon);
     }
     currentRainyValue = rainyCountries.length;
   }
@@ -343,9 +343,9 @@ function rainyFunction() {
  *To clear the previous selected border of the icons
  */
 function clearBorder() {
-  for (let i = 0; i < 3; i++) {
+  for (let valuei = 0; valuei < 3; valuei++) {
     document
-      .getElementById("icon" + (i + 1))
+      .getElementById("icon" + (valuei + 1))
       .setAttribute("style", "border-bottom-style: none");
   }
 }
@@ -403,7 +403,7 @@ function midcardUpdateValues(val, currentCountry, index, icon) {
       ) +
       "-" +
       new Date(currentTimezone).getFullYear();
-    if (currentHours == 0) {
+    if (currentHours === 0) {
       currentHours = 12;
     }
     val.querySelector("#middle-city-time").innerText =
