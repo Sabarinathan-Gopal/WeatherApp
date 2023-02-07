@@ -277,10 +277,10 @@ function tempFunction(currentHour, cities) {
       var temphour = document.getElementById("time" + valuei);
       temphour.innerText = 2;
     } else {
-      var temphour = document.getElementById("time" + i);
+      var temphour = document.getElementById("time" + count);
       temphour.innerText = cityObject
         .getNextFiveHrs()
-        [i].slice(0, cityObject.getNextFiveHrs()[i].length - 2);
+        [count].slice(0, cityObject.getNextFiveHrs()[count].length - 2);
     }
     var currentImage = document.getElementById("current-image" + valuei);
     tempImage(temphour.innerText, currentImage);
