@@ -11,85 +11,69 @@ let cityObject;
   }
 })();
 
-var cityFunction = function () {};
-
-// Set values operation performed for all the needed fields
-cityFunction.prototype.setTotalValues = function (citiesTotal) {
-  this.citiesTotal = citiesTotal;
-};
-
-cityFunction.prototype.setCityName = function (cityName) {
-  this.cityName = cityName;
-};
-
-cityFunction.prototype.setDateAndTime = function (dateAndTime) {
-  this.dateAndTime = dateAndTime;
-};
-
-cityFunction.prototype.setTimeZone = function (timeZone) {
-  this.timeZone = timeZone;
-};
-
-cityFunction.prototype.setTemperature = function (temperature) {
-  this.temperature = temperature;
-};
-
-cityFunction.prototype.setHumidity = function (humidity) {
-  this.humidity = humidity;
-};
-
-cityFunction.prototype.setPrecipitation = function (precipitation) {
-  this.precipitation = precipitation;
-};
-
-cityFunction.prototype.setNextFiveHrs = function (nextFiveHrs) {
-  this.nextFiveHrs = nextFiveHrs;
-};
-
-// Get values operation performed for all the needed fields
-
-cityFunction.prototype.getTotalValues = function () {
-  return this.citiesTotal;
-};
-
-cityFunction.prototype.getCityName = function () {
-  return this.cityName;
-};
-
-cityFunction.prototype.getDateAndTime = function () {
-  return this.dateAndTime;
-};
-
-cityFunction.prototype.getTimeZone = function () {
-  return this.timeZone;
-};
-
-cityFunction.prototype.getTemperature = function () {
-  return this.temperature;
-};
-
-cityFunction.prototype.getHumidity = function () {
-  return this.humidity;
-};
-
-cityFunction.prototype.getPrecipitation = function () {
-  return this.precipitation;
-};
-
-cityFunction.prototype.getNextFiveHrs = function () {
-  return this.nextFiveHrs;
-};
-
-cityFunction.prototype.getTimeStamp = function (val) {
-  let timestamp;
-  if (val >= 12) {
-    timestamp = "AM";
-    return timestamp;
-  } else {
-    timestamp = "PM";
-    return timestamp;
+class cityFunction {
+  constructor() {}
+  // Set values operation performed for all the needed fields
+  setTotalValues(citiesTotal) {
+    this.citiesTotal = citiesTotal;
   }
-};
+  setCityName(cityName) {
+    this.cityName = cityName;
+  }
+  setDateAndTime(dateAndTime) {
+    this.dateAndTime = dateAndTime;
+  }
+  setTimeZone(timeZone) {
+    this.timeZone = timeZone;
+  }
+  setTemperature(temperature) {
+    this.temperature = temperature;
+  }
+  setHumidity(humidity) {
+    this.humidity = humidity;
+  }
+  setPrecipitation(precipitation) {
+    this.precipitation = precipitation;
+  }
+  setNextFiveHrs(nextFiveHrs) {
+    this.nextFiveHrs = nextFiveHrs;
+  }
+  // Get values operation performed for all the needed fields
+  getTotalValues() {
+    return this.citiesTotal;
+  }
+  getCityName() {
+    return this.cityName;
+  }
+  getDateAndTime() {
+    return this.dateAndTime;
+  }
+  getTimeZone() {
+    return this.timeZone;
+  }
+  getTemperature() {
+    return this.temperature;
+  }
+  getHumidity() {
+    return this.humidity;
+  }
+  getPrecipitation() {
+    return this.precipitation;
+  }
+  getNextFiveHrs() {
+    return this.nextFiveHrs;
+  }
+  getTimeStamp(val) {
+    let timestamp;
+    if (val >= 12) {
+      timestamp = "AM";
+      return timestamp;
+    } else {
+      timestamp = "PM";
+      return timestamp;
+    }
+  }
+}
 
 window.onload = function () {
   var cityOptionbox = document.getElementById("city-options");
