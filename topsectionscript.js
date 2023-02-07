@@ -12,11 +12,11 @@ var optionBox = document.getElementById("city-option");
 
 window.onload = function () {
   var cityOptionbox = document.getElementById("city-options");
-  for (var x in totalJsonfile) {
+  for (var city in totalJsonfile) {
     cityOptionbox.innerHTML =
       cityOptionbox.innerHTML +
       '<option value="' +
-      totalJsonfile[x].cityName +
+      totalJsonfile[city].cityName +
       '">';
   }
   totalCityWeather("Nome");
@@ -30,12 +30,12 @@ window.onload = function () {
 function totalCityWeather(cities) {
   cities = cities.toLowerCase();
   let found = false;
-  for (let x in totalJsonfile) {
-    if (cities == x) {
+  for (let city in totalJsonfile) {
+    if (cities === city) {
       found = true;
     }
   }
-  if (found == true) {
+  if (found === true) {
     topSector(cities);
     optionBox.setAttribute("style", "border-color:transparent");
     document.getElementById("value-style1").innerText = "C";
@@ -53,11 +53,11 @@ function errorDisplay() {
   let errorItem = document.getElementsByClassName("error-validation");
   let errorImage = document.getElementsByClassName("weather-img");
   optionBox.setAttribute("style", "border-color:red");
-  for (let i = 0; i < errorItem.length; i++) {
-    errorItem[i].innerHTML = "NIL";
+  for (let valuei = 0; valuei < errorItem.length; valuei++) {
+    errorItem[valuei].innerHTML = "NIL";
   }
-  for (let i = 0; i < errorImage.length; i++) {
-    errorImage[i].src =
+  for (let valuei = 0; valuei < errorImage.length; i++) {
+    errorImage[valuei].src =
       "./Assets/HTML & CSS/General Images & Icons/warning.svg";
   }
   document.getElementById("value-style1").innerText = "";
@@ -121,7 +121,7 @@ function topSector(cities) {
       ) +
       "-" +
       new Date(currentTimezone).getFullYear();
-    if (currentHours == 0) {
+    if (currentHours === 0) {
       currentHours = 12;
     }
     currenTime.innerText =
@@ -169,32 +169,32 @@ function topSector(cities) {
  * @param {string} cities
  */
 function tempFunction(currentHour, cities) {
-  for (let i = 0; i < 5; i++) {
+  for (let valuei = 0; valuei < 5; valuei++) {
     var timelog = document.getElementById("timelog" + i);
-    if (Number(currentHour) + i + 1 > 24) {
+    if (Number(currentHour) + valuei + 1 > 24) {
       currentHour = currentHour - 24;
     }
-    if (Number(currentHour) + i + 1 < 12) {
-      timelog.innerText = Number(currentHour) + (i + 1) + "AM";
-    } else if (Number(currentHour) + i + 1 == 12) {
+    if (Number(currentHour) + valuei + 1 < 12) {
+      timelog.innerText = Number(currentHour) + (valuei + 1) + "AM";
+    } else if (Number(currentHour) + valuei + 1 === 12) {
       timelog.innerText = Number(currentHour) + (i + 1) + "PM";
-    } else if (Number(currentHour) + i + 1 == 24) {
+    } else if (Number(currentHour) + valuei + 1 === 24) {
       timelog.innerText = 12 + "AM";
     } else {
-      timelog.innerText = Number(currentHour) + (i + 1) - 12 + "PM";
+      timelog.innerText = Number(currentHour) + (valuei + 1) - 12 + "PM";
     }
 
-    if (i == 4) {
-      var temphour = document.getElementById("time" + i);
+    if (valuei === 4) {
+      var temphour = document.getElementById("time" + valuei);
       temphour.innerText = 2;
     } else {
-      var temphour = document.getElementById("time" + i);
-      temphour.innerText = totalJsonfile[cities].nextFiveHrs[i].slice(
+      var temphour = document.getElementById("time" + valuei);
+      temphour.innerText = totalJsonfile[cities].nextFiveHrs[valuei].slice(
         0,
         totalJsonfile[cities].nextFiveHrs[i].length - 2
       );
     }
-    var currentImage = document.getElementById("current-image" + i);
+    var currentImage = document.getElementById("current-image" + valuei);
     tempImage(temphour.innerText, currentImage);
   }
 }
