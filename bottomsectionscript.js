@@ -6,8 +6,7 @@ let topCountries = Object.values(totalJsonfile);
 let timer2;
 let bottomSectionObj;
 
-let bottomSectionValues = function () {};
-bottomSectionValues.prototype = new cityFunction();
+class bottomSectionValues extends cityFunction {}
 bottomSectionObj = new bottomSectionValues();
 
 document
