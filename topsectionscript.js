@@ -2,17 +2,31 @@ var date = new Date().toJSON();
 let timer;
 var optionBox = document.getElementById("city-option");
 let cityObject;
+let totalDetails;
 //usage
+
+const getTotalCityDetails = () =>{
+  fetch('https://soliton.glitch.me/all-timezone-cities').then(response =>{
+  return response.json();
+  })
+  .then(responseData =>{
+    totalDetails = responseData;
+    console.log(responseData);
+  });
+};
 
 (function ifeStart() {
   optionBox.addEventListener("change", myFunction);
   function myFunction() {
     totalCityWeather(optionBox.value);
   }
+  getTotalCityDetails();
 })();
 
+
+
 class cityFunction {
-  constructor() {}
+  constructor() { }
   // Set values operation performed for all the needed fields
   setTotalValues(citiesTotal) {
     this.citiesTotal = citiesTotal;
@@ -73,8 +87,14 @@ class cityFunction {
       return timestamp;
     }
   }
+  httpGet(theUrl)
+  {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+  }
 }
-
 window.onload = function () {
   var cityOptionbox = document.getElementById("city-options");
   for (var city in totalJsonfile) {
@@ -93,15 +113,15 @@ window.onload = function () {
  * @param {string} cities
  */
 function totalCityWeather(cities) {
-  cities = cities.toLowerCase();
   let found = false;
+  let indexValue;
   for (let value in totalJsonfile) {
-    if (cities === value) {
+    if (cities.toLowerCase() === value) {
       found = true;
     }
   }
   if (found === true) {
-    topSector(cities);
+    topSector(cities.toLowerCase());
     optionBox.setAttribute("style", "border-color:transparent");
     document.getElementById("value-style1").innerText = "C";
     document.getElementById("value-style2").innerText = "F";
@@ -172,6 +192,16 @@ function topSector(cities) {
    *Allows the system to take the current time of the selected city using timezone
    */
   function mytimer() {
+    const timeZonePromise = async() => {
+    let promisetimeZone = new Promise((resolve)=>
+    {
+      setTimeout(() => resolve(cityObject.httpGet("https://soliton.glitch.me?city="+cityObject.getCityName())));
+    });
+    let option = await promisetimeZone;
+    
+    return option;
+  }
+    timeZonePromise().then((m) => console.log(m));
     currentTimezone = new Date().toLocaleString("en-US", {
       timeZone: cityObject.getTimeZone(),
     });
