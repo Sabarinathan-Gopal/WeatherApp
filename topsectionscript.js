@@ -30,10 +30,8 @@ const asyncAwait = async () => {
   asyncAwait();
 })();
 
-
-
 class cityFunction {
-  constructor() { }
+  constructor() {}
   // Set values operation performed for all the needed fields
 
   setTotalValues(citiesTotal) {
@@ -203,16 +201,6 @@ const topSector = async (cities, indValue) => {
    *Allows the system to take the current time of the selected city using timezone
    */
   function mytimer() {
-    const timeZonePromise = async() => {
-    let promisetimeZone = new Promise((resolve)=>
-    {
-      setTimeout(() => resolve(cityObject.httpGet("https://soliton.glitch.me?city="+cityObject.getCityName())));
-    });
-    let option = await promisetimeZone;
-    
-    return option;
-  }
-    timeZonePromise().then((m) => console.log(m));
     currentTimezone = new Date().toLocaleString("en-US", {
       timeZone: cityObject.getTimeZone(),
     });
