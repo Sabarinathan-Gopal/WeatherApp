@@ -5,28 +5,47 @@ let cityObject;
 let totalDetails;
 //usage
 
-const getTotalCityDetails = () =>{
-  fetch('https://soliton.glitch.me/all-timezone-cities').then(response =>{
-  return response.json();
-  })
-  .then(responseData =>{
-    totalDetails = responseData;
-    console.log(responseData);
-  });
+/**
+ *This function gets the response from the link and stores the values in a JSON format
+ *Stores a default value when the page loads
+ */
+const getTotalCityDetails = () => {
+  fetch("https://soliton.glitch.me/all-timezone-cities")
+    .then((response) => {
+      return response.json();
+    })
+    .then((responseData) => {
+      totalDetails = responseData;
+      console.log(totalDetails);
+      totalCityWeather("Nome");
+    });
 };
 
-(function ifeStart() {
-  optionBox.addEventListener("change", myFunction);
-  function myFunction() {
-    totalCityWeather(optionBox.value);
-  }
+/**
+ *Calls this function to check the selection box value and assigns the value
+ */
+function myFunction() {
+  totalCityWeather(optionBox.value);
+}
+
+/**
+ *Async Await function to perform step by step operation
+ */
+const asyncAwait = async () => {
+  const firstProcess = new Promise((resolve, reject) => resolve());
+  const secondProcess = new Promise((resolve, reject) => resolve());
+  let process1 = await firstProcess;
   getTotalCityDetails();
+  let process2 = await secondProcess;
+  optionBox.addEventListener("change", myFunction);
+};
+
+(function () {
+  asyncAwait();
 })();
 
-
-
 class cityFunction {
-  constructor() { }
+  constructor() {}
   // Set values operation performed for all the needed fields
   setTotalValues(citiesTotal) {
     this.citiesTotal = citiesTotal;
@@ -87,14 +106,14 @@ class cityFunction {
       return timestamp;
     }
   }
-  httpGet(theUrl)
-  {
+  httpGet(theUrl) {
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
-    xmlHttp.send( null );
+    xmlHttp.open("GET", theUrl, false); // false for synchronous request
+    xmlHttp.send(null);
     return xmlHttp.responseText;
   }
 }
+
 window.onload = function () {
   var cityOptionbox = document.getElementById("city-options");
   for (var city in totalJsonfile) {
@@ -104,7 +123,6 @@ window.onload = function () {
       totalJsonfile[city].cityName +
       '">';
   }
-  totalCityWeather("Nome");
 };
 
 /**
@@ -120,8 +138,9 @@ function totalCityWeather(cities) {
       found = true;
     }
   }
+  indexValue = checkIndex(cities);
   if (found === true) {
-    topSector(cities.toLowerCase());
+    topSector(cities, indexValue);
     optionBox.setAttribute("style", "border-color:transparent");
     document.getElementById("value-style1").innerText = "C";
     document.getElementById("value-style2").innerText = "F";
@@ -131,6 +150,20 @@ function totalCityWeather(cities) {
   }
 }
 
+/**
+ *cities value compared with the response data and temperature updated simultaneously
+ *Index value of the response data returned after comparing with the Js file
+ * @param {String} cities
+ * @return {Integer}
+ */
+function checkIndex(cities) {
+  for (let valuei = 0; valuei < totalDetails.length; valuei++) {
+    if (totalDetails[valuei].cityName == cities) {
+      return valuei;
+      break;
+    }
+  }
+}
 /**
  *To display validation if invalid cities entered in datalist
  */
@@ -162,16 +195,18 @@ function errorDisplay() {
  *To assign city details with the help of the JS file
  * @param {string} cities
  */
-function topSector(cities) {
+function topSector(cities, indValue) {
   cityObject = new cityFunction();
   cityObject.setTotalValues(totalJsonfile);
-  cityObject.setCityName(totalJsonfile[cities].cityName);
-  cityObject.setDateAndTime(totalJsonfile[cities].dateAndTime);
-  cityObject.setTemperature(totalJsonfile[cities].temperature);
-  cityObject.setHumidity(totalJsonfile[cities].humidity);
-  cityObject.setNextFiveHrs(totalJsonfile[cities].nextFiveHrs);
-  cityObject.setTimeZone(totalJsonfile[cities].timeZone);
-  cityObject.setPrecipitation(totalJsonfile[cities].precipitation);
+  cityObject.setCityName(totalJsonfile[cities.toLowerCase()].cityName);
+  cityObject.setDateAndTime(totalJsonfile[cities.toLowerCase()].dateAndTime);
+  cityObject.setTemperature(totalDetails[indValue].temperature);
+  cityObject.setHumidity(totalDetails[indValue].humidity);
+  cityObject.setNextFiveHrs(totalJsonfile[cities.toLowerCase()].nextFiveHrs);
+  cityObject.setTimeZone(totalJsonfile[cities.toLowerCase()].timeZone);
+  cityObject.setPrecipitation(
+    totalJsonfile[cities.toLowerCase()].precipitation
+  );
   var tempCelsius = document.getElementById("temperature-celsius");
   var tempFarenheit = document.getElementById("temperature-farenheit");
   var tempCurrent = document.getElementById("current-time");
@@ -192,16 +227,6 @@ function topSector(cities) {
    *Allows the system to take the current time of the selected city using timezone
    */
   function mytimer() {
-    const timeZonePromise = async() => {
-    let promisetimeZone = new Promise((resolve)=>
-    {
-      setTimeout(() => resolve(cityObject.httpGet("https://soliton.glitch.me?city="+cityObject.getCityName())));
-    });
-    let option = await promisetimeZone;
-    
-    return option;
-  }
-    timeZonePromise().then((m) => console.log(m));
     currentTimezone = new Date().toLocaleString("en-US", {
       timeZone: cityObject.getTimeZone(),
     });
