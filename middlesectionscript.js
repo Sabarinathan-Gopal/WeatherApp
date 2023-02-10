@@ -16,9 +16,12 @@ middleSectionObj = new middleSectionValues();
 
 numberOption.addEventListener("change", getNumberValue);
 window.addEventListener("resize", resizeChange);
-(function () {
+
+function middleSectionAsync() {
   var icon = "sunnyIcon";
-  summerCountries = Object.values(totalJsonfile).filter(
+  summerCountries = Object.values(
+    middleSectionObj.setResponseDataFunction()
+  ).filter(
     (city) =>
       Number(city.precipitation.substring(0, city.precipitation.length - 1)) >=
         50 &&
@@ -46,6 +49,21 @@ window.addEventListener("resize", resizeChange);
   currentSummerValue = currentInputValue;
   displayList = summerCountries;
   resizeChange();
+}
+
+/**
+ *Async Await function to perform step by step operation
+ */
+const asyncAwaitMiddle = async () => {
+  const firstProcess = new Promise((resolve, reject) => {
+    setTimeout(() => resolve(), 500);
+  });
+  let process1 = await firstProcess;
+  middleSectionAsync();
+};
+
+(function () {
+  asyncAwaitMiddle();
 })();
 
 /**
@@ -117,7 +135,9 @@ async function midScroll(val) {
 function summerFunction() {
   resizeChange();
   var icon = "sunnyIcon";
-  summerCountries = Object.values(totalJsonfile).filter(
+  summerCountries = Object.values(
+    middleSectionObj.setResponseDataFunction()
+  ).filter(
     (city) =>
       Number(city.precipitation.substring(0, city.precipitation.length - 1)) >=
         50 &&
@@ -270,7 +290,9 @@ function winterFunction() {
  */
 function rainyFunction() {
   var icon = "rainyIcon";
-  rainyCountries = Object.values(totalJsonfile).filter(
+  rainyCountries = Object.values(
+    middleSectionObj.setResponseDataFunction()
+  ).filter(
     (city) =>
       Number(city.humidity.substring(0, city.humidity.length - 1)) >= 50 &&
       Number(city.temperature.substring(0, city.temperature.length - 2)) < 20
