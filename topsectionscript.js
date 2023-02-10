@@ -112,6 +112,9 @@ class cityFunction {
     xmlHttp.send(null);
     return xmlHttp.responseText;
   }
+  setResponseDataFunction() {
+    return totalDetails;
+  }
 }
 
 window.onload = function () {
