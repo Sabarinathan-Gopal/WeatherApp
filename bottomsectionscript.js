@@ -2,7 +2,6 @@ let currentContinentArrow = "arrowDown";
 let currentTemperatureArrow = "arrowUp";
 let valuei = 0;
 var bottomElementCard = document.querySelector("#continent-box0");
-let topCountries = Object.values(totalJsonfile);
 let timer2;
 let bottomSectionObj;
 
@@ -15,13 +14,26 @@ document
   .getElementById("temperature-arrow")
   .addEventListener("click", () => temperatureSort());
 
-(function () {
+function bottomSectionAsync() {
+  let topCountries = Object.values(middleSectionObj.setResponseDataFunction());
   document.getElementById("thirdcontainer-city").replaceChildren();
   topCountries = topCountries.sort((a, b) =>
     b.timeZone.split("/")[0].localeCompare(a.timeZone.split("/")[0])
   );
   topCountries = tempSort(topCountries, currentTemperatureArrow);
   updateWithSort(topCountries);
+}
+
+const asyncAwaitBottom = async () => {
+  const firstProcess = new Promise((resolve, reject) => {
+    setTimeout(() => resolve(), 1000);
+  });
+  let process1 = await firstProcess;
+  bottomSectionAsync();
+};
+
+(function () {
+  asyncAwaitBottom();
 })();
 
 /**
