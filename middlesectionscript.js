@@ -56,7 +56,7 @@ function middleSectionAsync() {
  */
 const asyncAwaitMiddle = async () => {
   const firstProcess = new Promise((resolve, reject) => {
-    setTimeout(() => resolve(), 500);
+    setTimeout(() => resolve(), 1000);
   });
   let process1 = await firstProcess;
   middleSectionAsync();
