@@ -286,7 +286,7 @@ function tempFunction(currentHour, cities) {
       timelog.innerText = Number(currentHour) + (count + 1) - 12 + "PM";
     }
 
-    if (count === 4) {
+    if (count === 5) {
       var temphour = document.getElementById("time" + count);
       temphour.innerText = 2;
     } else {
