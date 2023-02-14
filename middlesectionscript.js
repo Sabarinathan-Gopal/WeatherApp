@@ -40,7 +40,7 @@ function middleSectionAsync() {
   document
     .getElementById("icon1")
     .setAttribute("style", "border-bottom-style: solid");
-  for (let valuej = 0; valuej < currentInputValue; valuej++) {
+  for (let valuej = 0; valuej < summerCountries.length; valuej++) {
     var clone = elementCard.cloneNode(true);
     clone.id = "city-card" + valuej;
     document.getElementById("total-cards").appendChild(clone);
@@ -56,7 +56,7 @@ function middleSectionAsync() {
  */
 const asyncAwaitMiddle = async () => {
   const firstProcess = new Promise((resolve, reject) => {
-    setTimeout(() => resolve(), 1000);
+    setTimeout(() => resolve(), 2000);
   });
   let process1 = await firstProcess;
   middleSectionAsync();
