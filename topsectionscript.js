@@ -3,19 +3,19 @@ let timer;
 var optionBox = document.getElementById("city-option");
 let cityObject;
 let totalDetails;
-//usage
+let timeLine;
 
 /**
- *This function gets the response from the link and stores the values in a JSON format
- *Stores a default value when the page loads
+ *To set the values that was fetched from the Postman
  */
-const getTotalCityDetails = () => {
+const getTotalCityDetails = async () => {
   fetch("https://soliton.glitch.me/all-timezone-cities")
     .then((response) => {
       return response.json();
     })
-    .then((responseData) => {
+    .then(async (responseData) => {
       totalDetails = responseData;
+      await optionValues();
       console.log(totalDetails);
       totalCityWeather("Nome");
     });
@@ -24,19 +24,17 @@ const getTotalCityDetails = () => {
 /**
  *Calls this function to check the selection box value and assigns the value
  */
-function myFunction() {
+const myFunction = async () => {
+  await timeLog(optionBox.value);
   totalCityWeather(optionBox.value);
-}
+};
 
 /**
  *Async Await function to perform step by step operation
  */
 const asyncAwait = async () => {
-  const firstProcess = new Promise((resolve, reject) => resolve());
-  const secondProcess = new Promise((resolve, reject) => resolve());
-  let process1 = await firstProcess;
-  getTotalCityDetails();
-  let process2 = await secondProcess;
+  await timeLog("Nome");
+  await getTotalCityDetails();
   optionBox.addEventListener("change", myFunction);
 };
 
@@ -47,6 +45,7 @@ const asyncAwait = async () => {
 class cityFunction {
   constructor() {}
   // Set values operation performed for all the needed fields
+
   setTotalValues(citiesTotal) {
     this.citiesTotal = citiesTotal;
   }
@@ -106,24 +105,21 @@ class cityFunction {
       return timestamp;
     }
   }
-  httpGet(theUrl) {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", theUrl, false); // false for synchronous request
-    xmlHttp.send(null);
-    return xmlHttp.responseText;
-  }
   setResponseDataFunction() {
     return totalDetails;
   }
 }
 
-window.onload = function () {
+/**
+ *To get the values to the Option Dropdown Box
+ */
+const optionValues = async () => {
   var cityOptionbox = document.getElementById("city-options");
-  for (var city in totalJsonfile) {
+  for (var value in totalDetails) {
     cityOptionbox.innerHTML =
       cityOptionbox.innerHTML +
       '<option value="' +
-      totalJsonfile[city].cityName +
+      totalDetails[value].cityName +
       '">';
   }
 };
@@ -205,7 +201,7 @@ function topSector(cities, indValue) {
   cityObject.setDateAndTime(totalJsonfile[cities.toLowerCase()].dateAndTime);
   cityObject.setTemperature(totalDetails[indValue].temperature);
   cityObject.setHumidity(totalDetails[indValue].humidity);
-  cityObject.setNextFiveHrs(totalJsonfile[cities.toLowerCase()].nextFiveHrs);
+  cityObject.setNextFiveHrs(timeFiveHrs.temperature);
   cityObject.setTimeZone(totalJsonfile[cities.toLowerCase()].timeZone);
   cityObject.setPrecipitation(
     totalJsonfile[cities.toLowerCase()].precipitation
