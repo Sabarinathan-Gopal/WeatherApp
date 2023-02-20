@@ -177,7 +177,7 @@ const topSector = async (cities, indValue) => {
   cityObject.setDateAndTime(totalDetails[indValue].dateAndTime);
   cityObject.setTemperature(totalDetails[indValue].temperature);
   cityObject.setHumidity(totalDetails[indValue].humidity);
-  currentFiveHrs = await timeLog(totalDetails[indValue].cityName);
+  await timeLog(totalDetails[indValue].cityName);
   cityObject.setNextFiveHrs(timeFiveHrs);
   cityObject.setTimeZone(totalDetails[indValue].timeZone);
   cityObject.setPrecipitation(totalDetails[indValue].precipitation);
