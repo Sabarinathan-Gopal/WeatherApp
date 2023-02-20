@@ -148,9 +148,9 @@ function errorDisplay() {
   for (let valuei = 0; valuei < errorItem.length; valuei++) {
     errorItem[valuei].innerHTML = "NIL";
   }
-  for (let valuei = 0; valuei < errorImage.length; i++) {
-    errorImage[valuei].src =
-      "./Assets/HTML & CSS/General Images & Icons/warning.svg";
+  for (let i = 0; i < errorImage.length; i++) {
+    errorImage[i].src =
+      "./Assets/HTML_&_CSS/General_Images_&_Icons/warning.svg";
   }
   document.getElementById("value-style1").innerText = "";
   document.getElementById("value-style2").innerText = "";
@@ -293,7 +293,10 @@ function tempFunction(currentHour, cities) {
       var temphour = document.getElementById("time" + count);
       temphour.innerText = cityObject
         .getNextFiveHrs()
-        [count].slice(0, cityObject.getNextFiveHrs()[count].length - 2);
+        .temperature[count].slice(
+          0,
+          cityObject.getNextFiveHrs().temperature[count].length - 2
+        );
     }
     var currentImage = document.getElementById("current-image" + count);
     tempImage(temphour.innerText, currentImage);
