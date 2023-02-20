@@ -43,8 +43,19 @@ const timeLog = async (cityValue) => {
     .then((response) => response.json())
     .then(async (result) => {
       timeLine = result.city_Date_Time_Name;
-      await getTimeHrs(timeLine);
+      timeFiveHrs = getTimeHrs(timeLine);
       console.log(timeLine);
+      return timeFiveHrs;
     })
     .catch((error) => console.log("error", error));
+};
+
+const getCityDetails = async () => {
+  await fetch("http://127.0.0.1:8000/all-timezone-cities")
+    .then((response) => {
+      return response.json();
+    })
+    .then(async (responseData) => {
+      totalDetails = responseData;
+    });
 };
