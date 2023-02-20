@@ -26,7 +26,7 @@ function bottomSectionAsync() {
 
 const asyncAwaitBottom = async () => {
   const firstProcess = new Promise((resolve, reject) => {
-    setTimeout(() => resolve(), 2000);
+    setTimeout(() => resolve(), 5000);
   });
   await firstProcess;
   bottomSectionAsync();
