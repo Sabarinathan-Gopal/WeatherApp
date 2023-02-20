@@ -201,7 +201,7 @@ body {
 .first-container {
       align-items: center;
       background-size: cover;
-      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("./Assets/HTML & CSS/General Images & Icons/background.svg");
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("./Assets/HTML_&_CSS/General_Images_&_Icons/background.svg");
       display: flex;
       flex-direction: column;
       height: 30%;
@@ -228,7 +228,6 @@ body {
       background-position-y: center;
       background-repeat: no-repeat;
       background-size: 85%;
-      /* background: url("./Assets/HTML & CSS/Icons for cities/maseru.svg"); */
       height: 50%;
       min-width: 80px;
   }
