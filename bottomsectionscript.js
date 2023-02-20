@@ -4,7 +4,7 @@ let valuei = 0;
 var bottomElementCard = document.querySelector("#continent-box0");
 let timer2;
 let bottomSectionObj;
-
+let topCountries;
 class bottomSectionValues extends cityFunction {}
 bottomSectionObj = new bottomSectionValues();
 document
@@ -15,7 +15,7 @@ document
   .addEventListener("click", () => temperatureSort());
 
 function bottomSectionAsync() {
-  let topCountries = Object.values(middleSectionObj.setResponseDataFunction());
+  topCountries = totalDetails;
   document.getElementById("thirdcontainer-city").replaceChildren();
   topCountries = topCountries.sort((a, b) =>
     b.timeZone.split("/")[0].localeCompare(a.timeZone.split("/")[0])
@@ -26,7 +26,7 @@ function bottomSectionAsync() {
 
 const asyncAwaitBottom = async () => {
   const firstProcess = new Promise((resolve, reject) => {
-    setTimeout(() => resolve(), 2000);
+    setTimeout(() => resolve(), 5000);
   });
   await firstProcess;
   bottomSectionAsync();
@@ -43,12 +43,12 @@ function continentSort() {
   if (currentContinentArrow === "arrowDown") {
     currentContinentArrow = "arrowUp";
     document.getElementById("continent-arrow").src =
-      "./Assets/HTML & CSS/General Images & Icons/arrowUp.svg";
+      "./Assets/HTML_&_CSS/General_Images_&_Icons/arrowUp.svg";
     Sort(currentContinentArrow, currentTemperatureArrow);
   } else if (currentContinentArrow === "arrowUp") {
     currentContinentArrow = "arrowDown";
     document.getElementById("continent-arrow").src =
-      "./Assets/HTML & CSS/General Images & Icons/arrowDown.svg";
+      "./Assets/HTML_&_CSS/General_Images_&_Icons/arrowDown.svg";
     Sort(currentContinentArrow, currentTemperatureArrow);
   }
 }
@@ -60,12 +60,12 @@ function temperatureSort() {
   if (currentTemperatureArrow === "arrowUp") {
     currentTemperatureArrow = "arrowDown";
     document.getElementById("temperature-arrow").src =
-      "./Assets/HTML & CSS/General Images & Icons/arrowDown.svg";
+      "./Assets/HTML_&_CSS/General_Images_&_Icons/arrowDown.svg";
     Sort(currentContinentArrow, currentTemperatureArrow);
   } else if (currentTemperatureArrow === "arrowDown") {
     currentTemperatureArrow = "arrowUp";
     document.getElementById("temperature-arrow").src =
-      "./Assets/HTML & CSS/General Images & Icons/arrowUp.svg";
+      "./Assets/HTML_&_CSS/General_Images_&_Icons/arrowUp.svg";
     Sort(currentContinentArrow, currentTemperatureArrow);
   }
 }
@@ -163,8 +163,8 @@ function updateWithSort(currentList) {
       var clone1 = bottomElementCard.cloneNode(true);
       clone1.id = "continent-box" + valuei;
       document.getElementById("thirdcontainer-city").appendChild(clone1);
-      element = currentList[element].cityName.toLowerCase();
-      bottomCardUpdateValues(clone1, element);
+      // element = currentList[element].cityName.toLowerCase();
+      bottomCardUpdateValues(clone1, currentList, element);
       valuei++;
     } else {
       break;
@@ -179,19 +179,17 @@ function updateWithSort(currentList) {
  * @param {Number} index
  * @param {string} icon
  */
-function bottomCardUpdateValues(val, currentCountry) {
+function bottomCardUpdateValues(val, currentList, currentCountry) {
   let currentCityName;
   let presentTimeZone;
-  bottomSectionObj.setCityName(totalJsonfile[currentCountry].cityName);
-  bottomSectionObj.setTemperature(totalJsonfile[currentCountry].temperature);
-  bottomSectionObj.setHumidity(totalJsonfile[currentCountry].humidity);
-  bottomSectionObj.setPrecipitation(
-    totalJsonfile[currentCountry].precipitation
-  );
+  bottomSectionObj.setCityName(currentList[currentCountry].cityName);
+  bottomSectionObj.setTemperature(currentList[currentCountry].temperature);
+  bottomSectionObj.setHumidity(currentList[currentCountry].humidity);
+  bottomSectionObj.setPrecipitation(currentList[currentCountry].precipitation);
   var currentCity = bottomSectionObj.getCityName().toLowerCase();
-  val.querySelector("#thirdcontainer-continent").innerText = totalJsonfile[
-    currentCity
-  ].timeZone.substring(0, totalJsonfile[currentCity].timeZone.indexOf("/"));
+  val.querySelector("#thirdcontainer-continent").innerText = currentList[
+    currentCountry
+  ].timeZone.substring(0, currentList[currentCountry].timeZone.indexOf("/"));
   currentCityName = bottomSectionObj.getCityName();
   presentTimeZone = bottomSectionObj.getTimeZone();
   val.querySelector("#thirdcontainer-temperature").innerText =
