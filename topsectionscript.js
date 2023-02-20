@@ -285,19 +285,13 @@ function tempFunction(currentHour, cities) {
     } else {
       timelog.innerText = Number(currentHour) + (count + 1) - 12 + "PM";
     }
-
-    if (count === 5) {
-      var temphour = document.getElementById("time" + count);
-      temphour.innerText = 2;
-    } else {
-      var temphour = document.getElementById("time" + count);
-      temphour.innerText = cityObject
-        .getNextFiveHrs()
-        .temperature[count].slice(
-          0,
-          cityObject.getNextFiveHrs().temperature[count].length - 2
-        );
-    }
+    var temphour = document.getElementById("time" + count);
+    temphour.innerText = cityObject
+      .getNextFiveHrs()
+      .temperature[count].slice(
+        0,
+        cityObject.getNextFiveHrs().temperature[count].length - 2
+      );
     var currentImage = document.getElementById("current-image" + count);
     tempImage(temphour.innerText, currentImage);
   }
