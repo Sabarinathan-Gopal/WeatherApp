@@ -18,7 +18,7 @@ const getTimeHrs = async (timeLine) => {
     redirect: "follow",
   };
 
-  await fetch("https://soliton.glitch.me/hourly-forecast", requestOptions)
+  await fetch("http://127.0.0.1:8000/hourly-forecast", requestOptions)
     .then((response) => response.json())
     .then((result) => {
       timeFiveHrs = result;
@@ -39,7 +39,7 @@ const timeLog = async (cityValue) => {
     redirect: "follow",
   };
 
-  await fetch("https://soliton.glitch.me?city=" + cityValue, requestOptions)
+  await fetch("http://127.0.0.1:8000?city=" + cityValue, requestOptions)
     .then((response) => response.json())
     .then(async (result) => {
       timeLine = result.city_Date_Time_Name;

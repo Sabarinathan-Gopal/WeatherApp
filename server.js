@@ -7,6 +7,8 @@ const {
   nextNhoursWeather,
 } = require("./timeZone.js");
 const PORT = 8000;
+let data;
+let cityData;
 const MIME_TYPES = {
   default: "application/octet-stream",
   html: "text/html; charset=UTF-8",
@@ -42,10 +44,26 @@ http
     console.log(`${req.method} ${req.url} ${statusCode}`);
     if (req.url === "/all-timezone-cities") {
       res.writeHead(200, { "Content-Type": "text/json" });
-      let data = allTimeZones();
-      data = JSON.stringify(data);
-      res.write(data);
+      data = allTimeZones();
+      res.write(JSON.stringify(data));
       res.end();
+    } else if (req.url.split("=")[0] === "/?city") {
+      res.writeHead(200, { "Content-Type": "text/json" });
+      let cityName = req.url.split("=")[1];
+      cityData = timeForOneCity(cityName);
+      res.write(JSON.stringify(cityData));
+      res.end();
+    } else if (req.url === "/hourly-forecast") {
+      res.writeHead(200, { "Content-Type": "text/json" });
+      if (cityData.city_Date_Time_Name) {
+        hourlyForecast = nextNhoursWeather(
+          cityData.city_Date_Time_Name,
+          6,
+          data
+        );
+        res.write(JSON.stringify(hourlyForecast));
+        res.end();
+      }
     }
   })
   .listen(PORT);
