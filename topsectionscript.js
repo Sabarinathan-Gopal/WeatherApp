@@ -12,7 +12,6 @@ let timeLine;
  *Async Await function to perform step by step operation
  */
 const asyncAwait = async () => {
-  //await timeLog("Nome");
   await getCityDetails();
   var cityOptionbox = document.getElementById("city-options");
   for (var value in totalDetails) {
