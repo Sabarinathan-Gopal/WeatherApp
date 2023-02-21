@@ -21,35 +21,30 @@ app.get("/all-timezone-cities", (req, res) => {
 //To get the timeline of the respective city
 app.get("/", (req, res) => {
   var cityName = req.query.city;
-  if(cityName)
-  {
+  if (cityName) {
     res.json(timeForOneCity(cityName));
     cityData = timeForOneCity(cityName);
-  }
-  else if(req.url.endsWith("/"))
-  {
+  } else if (req.url.endsWith("/")) {
     app.use(express.static("./"));
     res.sendFile(__dirname + "/index.html");
+  } else {
+    res
+      .status(404)
+      .json({ Error: "Not a Valid EndPoint.Please check API Doc" });
   }
-  else
-  {
-    res.status(404).json({Error:"Not a Valid EndPoint.Please check API Doc"});
-  }
-
 });
 
 //To get the temperature
-app.post("/hourly-forecast",(req,res)=>{
+app.post("/hourly-forecast", (req, res) => {
   let cityDTN = cityData.city_Date_Time_Name;
-  if(cityDTN)
-  {
+  if (cityDTN) {
     res.json(nextNhoursWeather(cityDTN, 6, data));
+  } else {
+    res
+      .status(404)
+      .json({ Error: "Not a Valid EndPoint.Please check API Doc" });
   }
-  else
-  {
-    res.status(404).json({Error:"Not a Valid EndPoint.Please check API Doc"});
-  }
-})
+});
 
 //Server Creation and listening process performed
 const server = http.createServer(app);
