@@ -190,7 +190,6 @@ function topSector(cities) {
   function mytimer() {
     currentTimezone = new Date().toLocaleString("en-US", {
       timeZone: cityObject.getTimeZone(),
-      //timeZone: totalJsonfile[cities].timeZone,
     });
     currentHours = new Date(currentTimezone).getHours() % 12;
     if (new Date(currentTimezone).getHours() >= 12) {
