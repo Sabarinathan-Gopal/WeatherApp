@@ -8,7 +8,6 @@ let bottomSectionObj;
 
 class bottomSectionValues extends cityFunction {}
 bottomSectionObj = new bottomSectionValues();
-
 document
   .getElementById("continent-arrow")
   .addEventListener("click", () => continentSort());

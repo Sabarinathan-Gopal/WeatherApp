@@ -243,7 +243,9 @@ function topSector(cities) {
  */
 function tempFunction(currentHour, cities) {
   for (let valuei = 0; valuei < 5; valuei++) {
-    var timelog = document.getElementById("timelog" + i);
+    var timelog = document.getElementById("timelog" + valuei);
+    var temphour = document.getElementById("time" + valuei);
+    var currentImage = document.getElementById("current-image" + valuei);
     if (Number(currentHour) + valuei + 1 > 24) {
       currentHour = currentHour - 24;
     }
@@ -258,15 +260,12 @@ function tempFunction(currentHour, cities) {
     }
 
     if (valuei === 4) {
-      var temphour = document.getElementById("time" + valuei);
       temphour.innerText = 2;
     } else {
-      var temphour = document.getElementById("time" + count);
       temphour.innerText = cityObject
         .getNextFiveHrs()
-        [count].slice(0, cityObject.getNextFiveHrs()[count].length - 2);
+        [valuei].slice(0, cityObject.getNextFiveHrs()[valuei].length - 2);
     }
-    var currentImage = document.getElementById("current-image" + valuei);
     tempImage(temphour.innerText, currentImage);
   }
 }
