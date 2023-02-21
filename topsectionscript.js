@@ -1,6 +1,7 @@
 var date = new Date().toJSON();
 let timer;
 var optionBox = document.getElementById("city-option");
+let cityObject;
 //usage
 
 (function ifeStart() {
@@ -9,6 +10,86 @@ var optionBox = document.getElementById("city-option");
     totalCityWeather(optionBox.value);
   }
 })();
+
+var cityFunction = function () {};
+
+// Set values operation performed for all the needed fields
+cityFunction.prototype.setTotalValues = function (citiesTotal) {
+  this.citiesTotal = citiesTotal;
+};
+
+cityFunction.prototype.setCityName = function (cityName) {
+  this.cityName = cityName;
+};
+
+cityFunction.prototype.setDateAndTime = function (dateAndTime) {
+  this.dateAndTime = dateAndTime;
+};
+
+cityFunction.prototype.setTimeZone = function (timeZone) {
+  this.timeZone = timeZone;
+};
+
+cityFunction.prototype.setTemperature = function (temperature) {
+  this.temperature = temperature;
+};
+
+cityFunction.prototype.setHumidity = function (humidity) {
+  this.humidity = humidity;
+};
+
+cityFunction.prototype.setPrecipitation = function (precipitation) {
+  this.precipitation = precipitation;
+};
+
+cityFunction.prototype.setNextFiveHrs = function (nextFiveHrs) {
+  this.nextFiveHrs = nextFiveHrs;
+};
+
+// Get values operation performed for all the needed fields
+
+cityFunction.prototype.getTotalValues = function () {
+  return this.citiesTotal;
+};
+
+cityFunction.prototype.getCityName = function () {
+  return this.cityName;
+};
+
+cityFunction.prototype.getDateAndTime = function () {
+  return this.dateAndTime;
+};
+
+cityFunction.prototype.getTimeZone = function () {
+  return this.timeZone;
+};
+
+cityFunction.prototype.getTemperature = function () {
+  return this.temperature;
+};
+
+cityFunction.prototype.getHumidity = function () {
+  return this.humidity;
+};
+
+cityFunction.prototype.getPrecipitation = function () {
+  return this.precipitation;
+};
+
+cityFunction.prototype.getNextFiveHrs = function () {
+  return this.nextFiveHrs;
+};
+
+cityFunction.prototype.getTimeStamp = function (val) {
+  let timestamp;
+  if (val >= 12) {
+    timestamp = "AM";
+    return timestamp;
+  } else {
+    timestamp = "PM";
+    return timestamp;
+  }
+};
 
 window.onload = function () {
   var cityOptionbox = document.getElementById("city-options");
@@ -30,8 +111,8 @@ window.onload = function () {
 function totalCityWeather(cities) {
   cities = cities.toLowerCase();
   let found = false;
-  for (let city in totalJsonfile) {
-    if (cities === city) {
+  for (let value in totalJsonfile) {
+    if (cities === value) {
       found = true;
     }
   }
@@ -78,14 +159,22 @@ function errorDisplay() {
  * @param {string} cities
  */
 function topSector(cities) {
+  cityObject = new cityFunction();
+  cityObject.setTotalValues(totalJsonfile);
+  cityObject.setCityName(totalJsonfile[cities].cityName);
+  cityObject.setDateAndTime(totalJsonfile[cities].dateAndTime);
+  cityObject.setTemperature(totalJsonfile[cities].temperature);
+  cityObject.setHumidity(totalJsonfile[cities].humidity);
+  cityObject.setNextFiveHrs(totalJsonfile[cities].nextFiveHrs);
+  cityObject.setTimeZone(totalJsonfile[cities].timeZone);
+  cityObject.setPrecipitation(totalJsonfile[cities].precipitation);
   var tempCelsius = document.getElementById("temperature-celsius");
   var tempFarenheit = document.getElementById("temperature-farenheit");
   var tempCurrent = document.getElementById("current-time");
   var currentImagei = document.getElementById("current-image");
   var tempHumidity = document.getElementById("humidity-value");
   var tempPrecipitation = document.getElementById("precipitation-value");
-
-  tempCelsius.innerText = totalJsonfile[cities].temperature;
+  tempCelsius.innerText = cityObject.getTemperature();
   var actualCeliusval = tempCelsius.innerText.substring(
     0,
     tempCelsius.innerText.indexOf("C") - 1
@@ -100,7 +189,7 @@ function topSector(cities) {
    */
   function mytimer() {
     currentTimezone = new Date().toLocaleString("en-US", {
-      timeZone: totalJsonfile[cities].timeZone,
+      timeZone: cityObject.getTimeZone(),
     });
     currentHours = new Date(currentTimezone).getHours() % 12;
     if (new Date(currentTimezone).getHours() >= 12) {
@@ -149,8 +238,8 @@ function topSector(cities) {
   tempImage(tempCelsius.innerText, currentImagei);
   document.getElementById("timecurrent").innerText =
     tempCelsius.innerText.split();
-  tempHumidity.innerText = totalJsonfile[cities].humidity;
-  tempPrecipitation.innerText = totalJsonfile[cities].precipitation;
+  tempHumidity.innerText = cityObject.getHumidity();
+  tempPrecipitation.innerText = cityObject.getPrecipitation();
   document
     .getElementById("city-seperate-image")
     .setAttribute(

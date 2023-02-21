@@ -1,9 +1,15 @@
 let currentContinentArrow = "arrowDown";
 let currentTemperatureArrow = "arrowUp";
-let i = 0;
-var elementCard = document.querySelector("#continent-box0");
+let valuei = 0;
+var bottomElementCard = document.querySelector("#continent-box0");
 let topCountries = Object.values(totalJsonfile);
 let timer2;
+let bottomSectionObj;
+
+let bottomSectionValues = function () {};
+bottomSectionValues.prototype = new cityFunction();
+bottomSectionObj = new bottomSectionValues();
+
 document
   .getElementById("continent-arrow")
   .addEventListener("click", () => continentSort());
@@ -13,18 +19,6 @@ document
 
 (function () {
   document.getElementById("thirdcontainer-city").replaceChildren();
-  i = 0;
-  for (let element in totalJsonfile) {
-    if (i < 12) {
-      var clone = elementCard.cloneNode(true);
-      clone.id = "continent-box" + i;
-      document.getElementById("thirdcontainer-city").appendChild(clone);
-      midcardUpdateValues(clone, element);
-      i++;
-    } else {
-      break;
-    }
-  }
   topCountries = topCountries.sort((a, b) =>
     b.timeZone.split("/")[0].localeCompare(a.timeZone.split("/")[0])
   );
@@ -36,12 +30,12 @@ document
  *To change the arrow when the continent arrows are clicked
  */
 function continentSort() {
-  if (currentContinentArrow == "arrowDown") {
+  if (currentContinentArrow === "arrowDown") {
     currentContinentArrow = "arrowUp";
     document.getElementById("continent-arrow").src =
       "./Assets/HTML & CSS/General Images & Icons/arrowUp.svg";
     Sort(currentContinentArrow, currentTemperatureArrow);
-  } else if (currentContinentArrow == "arrowUp") {
+  } else if (currentContinentArrow === "arrowUp") {
     currentContinentArrow = "arrowDown";
     document.getElementById("continent-arrow").src =
       "./Assets/HTML & CSS/General Images & Icons/arrowDown.svg";
@@ -53,12 +47,12 @@ function continentSort() {
  *To change the arrow when the temperature arrows are clicked
  */
 function temperatureSort() {
-  if (currentTemperatureArrow == "arrowUp") {
+  if (currentTemperatureArrow === "arrowUp") {
     currentTemperatureArrow = "arrowDown";
     document.getElementById("temperature-arrow").src =
       "./Assets/HTML & CSS/General Images & Icons/arrowDown.svg";
     Sort(currentContinentArrow, currentTemperatureArrow);
-  } else if (currentTemperatureArrow == "arrowDown") {
+  } else if (currentTemperatureArrow === "arrowDown") {
     currentTemperatureArrow = "arrowUp";
     document.getElementById("temperature-arrow").src =
       "./Assets/HTML & CSS/General Images & Icons/arrowUp.svg";
@@ -74,10 +68,10 @@ function temperatureSort() {
  */
 function Sort(currentContinentArrow, currentTemperatureArrow) {
   if (
-    (currentContinentArrow == "arrowDown" &&
-      currentTemperatureArrow == "arrowDown") ||
-    (currentContinentArrow == "arrowDown" &&
-      currentTemperatureArrow == "arrowUp")
+    (currentContinentArrow === "arrowDown" &&
+      currentTemperatureArrow === "arrowDown") ||
+    (currentContinentArrow === "arrowDown" &&
+      currentTemperatureArrow === "arrowUp")
   ) {
     topCountries = topCountries.sort((a, b) =>
       b.timeZone.split("/")[0].localeCompare(a.timeZone.split("/")[0])
@@ -85,10 +79,10 @@ function Sort(currentContinentArrow, currentTemperatureArrow) {
     topCountries = tempSort(topCountries, currentTemperatureArrow);
     updateWithSort(topCountries);
   } else if (
-    (currentContinentArrow == "arrowUp" &&
-      currentTemperatureArrow == "arrowUp") ||
-    (currentContinentArrow == "arrowUp" &&
-      currentTemperatureArrow == "arrowDown")
+    (currentContinentArrow === "arrowUp" &&
+      currentTemperatureArrow === "arrowUp") ||
+    (currentContinentArrow === "arrowUp" &&
+      currentTemperatureArrow === "arrowDown")
   ) {
     topCountries = topCountries.sort((a, b) =>
       a.timeZone.split("/")[0].localeCompare(b.timeZone.split("/")[0])
@@ -106,9 +100,9 @@ function Sort(currentContinentArrow, currentTemperatureArrow) {
  * @return {List}
  */
 function tempSort(topCountries, tempArrow) {
-  if (tempArrow == "arrowDown") {
+  if (tempArrow === "arrowDown") {
     topCountries.sort(function (a, b) {
-      if (a.timeZone.split("/")[0] == b.timeZone.split("/")[0]) {
+      if (a.timeZone.split("/")[0] === b.timeZone.split("/")[0]) {
         if (
           Number(a.temperature.split("°C")[0]) <
           Number(b.temperature.split("°C")[0])
@@ -125,9 +119,9 @@ function tempSort(topCountries, tempArrow) {
       }
     });
     return topCountries;
-  } else if (tempArrow == "arrowUp") {
+  } else if (tempArrow === "arrowUp") {
     topCountries.sort(function (a, b) {
-      if (a.timeZone.split("/")[0] == b.timeZone.split("/")[0]) {
+      if (a.timeZone.split("/")[0] === b.timeZone.split("/")[0]) {
         if (
           Number(a.temperature.split("°C")[0]) >
           Number(b.temperature.split("°C")[0])
@@ -153,15 +147,15 @@ function tempSort(topCountries, tempArrow) {
  */
 function updateWithSort(currentList) {
   document.getElementById("thirdcontainer-city").replaceChildren();
-  i = 0;
+  valuei = 0;
   for (let element in currentList) {
-    if (i < 12) {
-      var clone = elementCard.cloneNode(true);
-      clone.id = "continent-box" + i;
-      document.getElementById("thirdcontainer-city").appendChild(clone);
+    if (valuei < 12) {
+      var clone1 = bottomElementCard.cloneNode(true);
+      clone1.id = "continent-box" + valuei;
+      document.getElementById("thirdcontainer-city").appendChild(clone1);
       element = currentList[element].cityName.toLowerCase();
-      midcardUpdateValues(clone, element);
-      i++;
+      bottomCardUpdateValues(clone1, element);
+      valuei++;
     } else {
       break;
     }
@@ -175,15 +169,25 @@ function updateWithSort(currentList) {
  * @param {Number} index
  * @param {string} icon
  */
-function midcardUpdateValues(val, currentCountry) {
-  var currentCity = totalJsonfile[currentCountry].cityName.toLowerCase();
+function bottomCardUpdateValues(val, currentCountry) {
+  let currentCityName;
+  let presentTimeZone;
+  bottomSectionObj.setCityName(totalJsonfile[currentCountry].cityName);
+  bottomSectionObj.setTemperature(totalJsonfile[currentCountry].temperature);
+  bottomSectionObj.setHumidity(totalJsonfile[currentCountry].humidity);
+  bottomSectionObj.setPrecipitation(
+    totalJsonfile[currentCountry].precipitation
+  );
+  var currentCity = bottomSectionObj.getCityName().toLowerCase();
   val.querySelector("#thirdcontainer-continent").innerText = totalJsonfile[
     currentCity
   ].timeZone.substring(0, totalJsonfile[currentCity].timeZone.indexOf("/"));
+  currentCityName = bottomSectionObj.getCityName();
+  presentTimeZone = bottomSectionObj.getTimeZone();
   val.querySelector("#thirdcontainer-temperature").innerText =
-    totalJsonfile[currentCity].temperature;
+    bottomSectionObj.getTemperature();
   val.querySelector("#thirdcontainer-humidity").innerText =
-    totalJsonfile[currentCity].humidity;
+    bottomSectionObj.getHumidity();
   var currentHours;
   var currentTimezone;
   var timestamp;
@@ -192,19 +196,17 @@ function midcardUpdateValues(val, currentCountry) {
   timer2 = setInterval(mytimer2, 500);
   function mytimer2() {
     currentTimezone = new Date().toLocaleString("en-US", {
-      timeZone: totalJsonfile[currentCity].timeZone,
+      timeZone: presentTimeZone,
     });
     currentHours = new Date(currentTimezone).getHours() % 12;
-    if (new Date(currentTimezone).getHours() >= 12) {
-      timestamp = "PM";
-    } else {
-      timestamp = "AM";
-    }
-    if (currentHours == 0) {
+    timestamp = bottomSectionObj.getTimeStamp(
+      new Date(currentTimezone).getHours()
+    );
+    if (currentHours === 0) {
       currentHours = 12;
     }
     val.querySelector("#thirdcontainer-country").innerText =
-      totalJsonfile[currentCountry].cityName +
+      currentCityName +
       "," +
       " " +
       (currentHours < 10 ? "0" + currentHours : currentHours) +
