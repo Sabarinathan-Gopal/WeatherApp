@@ -25,8 +25,25 @@ const asyncAwait = async () => {
   totalCityWeather();
 };
 
+/**
+ *To reload the topsection with 4 hours of span to update the next five hours
+ */
+const timeChange = async () => {
+  await getCityDetails();
+  var cityOptionbox = document.getElementById("city-options");
+  for (var value in totalDetails) {
+    cityOptionbox.innerHTML =
+      cityOptionbox.innerHTML +
+      '<option value="' +
+      totalDetails[value].cityName +
+      '">';
+  }
+  totalCityWeather();
+};
+
 (function () {
   asyncAwait();
+  setInterval(timeChange, 14400000);
 })();
 
 class cityFunction {
