@@ -11,8 +11,7 @@ var elementCard = document.getElementById("city-card0");
 let timer1;
 let middleSectionObj;
 
-let middleSectionValues = function () {};
-middleSectionValues.prototype = new cityFunction();
+class middleSectionValues extends cityFunction {}
 middleSectionObj = new middleSectionValues();
 
 numberOption.addEventListener("change", getNumberValue);
