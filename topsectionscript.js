@@ -252,7 +252,6 @@ const topSector = async (cities, indValue) => {
       new Date(currentTimezone).getSeconds() < 10
         ? "0" + new Date(currentTimezone).getSeconds()
         : new Date(currentTimezone).getSeconds();
-    console.log(currenTime + " " + currentSeconds + " " + currentTimezone);
   }
   mytimer();
   clearInterval(timer);
