@@ -2,18 +2,50 @@ var date = new Date().toJSON();
 let timer;
 var optionBox = document.getElementById("city-option");
 let cityObject;
-//usage
+let totalDetails;
+let timeLine;
 
-(function ifeStart() {
+/**
+ *To set the values that was fetched from the Postman
+ */
+const getTotalCityDetails = async () => {
+  fetch("https://soliton.glitch.me/all-timezone-cities")
+    .then((response) => {
+      return response.json();
+    })
+    .then(async (responseData) => {
+      totalDetails = responseData;
+      await optionValues();
+      console.log(totalDetails);
+      totalCityWeather("Nome");
+    });
+};
+
+/**
+ *Calls this function to check the selection box value and assigns the value
+ */
+const myFunction = async () => {
+  await timeLog(optionBox.value);
+  totalCityWeather(optionBox.value);
+};
+
+/**
+ *Async Await function to perform step by step operation
+ */
+const asyncAwait = async () => {
+  await timeLog("Nome");
+  await getTotalCityDetails();
   optionBox.addEventListener("change", myFunction);
-  function myFunction() {
-    totalCityWeather(optionBox.value);
-  }
+};
+
+(function () {
+  asyncAwait();
 })();
 
 class cityFunction {
   constructor() {}
   // Set values operation performed for all the needed fields
+
   setTotalValues(citiesTotal) {
     this.citiesTotal = citiesTotal;
   }
@@ -73,9 +105,15 @@ class cityFunction {
       return timestamp;
     }
   }
+  setResponseDataFunction() {
+    return totalDetails;
+  }
 }
 
-window.onload = function () {
+/**
+ *To get the values to the Option Dropdown Box
+ */
+const optionValues = async () => {
   var cityOptionbox = document.getElementById("city-options");
   for (var city in totalJsonfile) {
     cityOptionbox.innerHTML =
@@ -84,7 +122,6 @@ window.onload = function () {
       totalJsonfile[city].cityName +
       '">';
   }
-  totalCityWeather("Nome");
 };
 
 /**
@@ -93,15 +130,16 @@ window.onload = function () {
  * @param {string} cities
  */
 function totalCityWeather(cities) {
-  cities = cities.toLowerCase();
   let found = false;
+  let indexValue;
   for (let value in totalJsonfile) {
-    if (cities === value) {
+    if (cities.toLowerCase() === value) {
       found = true;
     }
   }
+  indexValue = checkIndex(cities);
   if (found === true) {
-    topSector(cities);
+    topSector(cities, indexValue);
     optionBox.setAttribute("style", "border-color:transparent");
     document.getElementById("value-style1").innerText = "C";
     document.getElementById("value-style2").innerText = "F";
@@ -111,6 +149,20 @@ function totalCityWeather(cities) {
   }
 }
 
+/**
+ *cities value compared with the response data and temperature updated simultaneously
+ *Index value of the response data returned after comparing with the Js file
+ * @param {String} cities
+ * @return {Integer}
+ */
+function checkIndex(cities) {
+  for (let valuei = 0; valuei < totalDetails.length; valuei++) {
+    if (totalDetails[valuei].cityName == cities) {
+      return valuei;
+      break;
+    }
+  }
+}
 /**
  *To display validation if invalid cities entered in datalist
  */
@@ -142,16 +194,18 @@ function errorDisplay() {
  *To assign city details with the help of the JS file
  * @param {string} cities
  */
-function topSector(cities) {
+function topSector(cities, indValue) {
   cityObject = new cityFunction();
   cityObject.setTotalValues(totalJsonfile);
-  cityObject.setCityName(totalJsonfile[cities].cityName);
-  cityObject.setDateAndTime(totalJsonfile[cities].dateAndTime);
-  cityObject.setTemperature(totalJsonfile[cities].temperature);
-  cityObject.setHumidity(totalJsonfile[cities].humidity);
-  cityObject.setNextFiveHrs(totalJsonfile[cities].nextFiveHrs);
-  cityObject.setTimeZone(totalJsonfile[cities].timeZone);
-  cityObject.setPrecipitation(totalJsonfile[cities].precipitation);
+  cityObject.setCityName(totalJsonfile[cities.toLowerCase()].cityName);
+  cityObject.setDateAndTime(totalJsonfile[cities.toLowerCase()].dateAndTime);
+  cityObject.setTemperature(totalDetails[indValue].temperature);
+  cityObject.setHumidity(totalDetails[indValue].humidity);
+  cityObject.setNextFiveHrs(timeFiveHrs.temperature);
+  cityObject.setTimeZone(totalJsonfile[cities.toLowerCase()].timeZone);
+  cityObject.setPrecipitation(
+    totalJsonfile[cities.toLowerCase()].precipitation
+  );
   var tempCelsius = document.getElementById("temperature-celsius");
   var tempFarenheit = document.getElementById("temperature-farenheit");
   var tempCurrent = document.getElementById("current-time");

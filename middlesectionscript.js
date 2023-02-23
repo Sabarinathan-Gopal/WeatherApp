@@ -16,15 +16,24 @@ middleSectionObj = new middleSectionValues();
 
 numberOption.addEventListener("change", getNumberValue);
 window.addEventListener("resize", resizeChange);
-(function () {
+
+function middleSectionAsync() {
   var icon = "sunnyIcon";
-  summerCountries = Object.values(totalJsonfile).filter(
-    (city) =>
-      Number(city.precipitation.substring(0, city.precipitation.length - 1)) >=
-        50 &&
-      Number(city.humidity.substring(0, city.humidity.length - 1)) < 50 &&
-      Number(city.temperature.substring(0, city.temperature.length - 2)) > 29
-  );
+  try {
+    summerCountries = Object.values(
+      middleSectionObj.setResponseDataFunction()
+    ).filter(
+      (city) =>
+        Number(
+          city.precipitation.substring(0, city.precipitation.length - 1)
+        ) >= 50 &&
+        Number(city.humidity.substring(0, city.humidity.length - 1)) < 50 &&
+        Number(city.temperature.substring(0, city.temperature.length - 2)) > 29
+    );
+  } catch (err) {
+    alert("Please wait for sometime", err);
+    window.location.reload();
+  }
   summerCountries.sort((a, b) => {
     return b.temperature - a.temperature;
   });
@@ -37,7 +46,7 @@ window.addEventListener("resize", resizeChange);
   document
     .getElementById("icon1")
     .setAttribute("style", "border-bottom-style: solid");
-  for (let valuej = 0; valuej < currentInputValue; valuej++) {
+  for (let valuej = 0; valuej < summerCountries.length; valuej++) {
     var clone = elementCard.cloneNode(true);
     clone.id = "city-card" + valuej;
     document.getElementById("total-cards").appendChild(clone);
@@ -46,6 +55,21 @@ window.addEventListener("resize", resizeChange);
   currentSummerValue = currentInputValue;
   displayList = summerCountries;
   resizeChange();
+}
+
+/**
+ *Async Await function to perform step by step operation
+ */
+const asyncAwaitMiddle = async () => {
+  const firstProcess = new Promise((resolve) => {
+    setTimeout(() => resolve(), 2000);
+  });
+  await firstProcess;
+  middleSectionAsync();
+};
+
+(function () {
+  asyncAwaitMiddle();
 })();
 
 /**
@@ -117,7 +141,9 @@ async function midScroll(val) {
 function summerFunction() {
   resizeChange();
   var icon = "sunnyIcon";
-  summerCountries = Object.values(totalJsonfile).filter(
+  summerCountries = Object.values(
+    middleSectionObj.setResponseDataFunction()
+  ).filter(
     (city) =>
       Number(city.precipitation.substring(0, city.precipitation.length - 1)) >=
         50 &&
@@ -270,7 +296,9 @@ function winterFunction() {
  */
 function rainyFunction() {
   var icon = "rainyIcon";
-  rainyCountries = Object.values(totalJsonfile).filter(
+  rainyCountries = Object.values(
+    middleSectionObj.setResponseDataFunction()
+  ).filter(
     (city) =>
       Number(city.humidity.substring(0, city.humidity.length - 1)) >= 50 &&
       Number(city.temperature.substring(0, city.temperature.length - 2)) < 20
