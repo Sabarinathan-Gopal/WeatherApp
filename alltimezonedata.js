@@ -1,6 +1,9 @@
 //Import the neccessary module
-const { allTimeZones, nextNhoursWeather } = require("./timeZone.js");
-
+const {
+  allTimeZones,
+  timeForOneCity,
+  nextNhoursWeather,
+} = require("sabarinathan_gopal_npm_timezone_package");
 /* The listener will receive a message from server.js(parent) and based on that* message a particular function is called and the resulted data is returned to server.js.*/
 process.on("message", (message) => {
   let Data;
@@ -10,6 +13,8 @@ process.on("message", (message) => {
       message.messagebody.hours,
       message.messagebody.weatherData
     );
+  } else if (message.messagename === "GetcityInfo") {
+    Data = timeForOneCity(message.messagebody.cityname);
   } else if (message.messagename === "GetData") {
     Data = allTimeZones();
   }
