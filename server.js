@@ -1,14 +1,15 @@
 const { fork } = require("child_process");
+const eventEmitter = require("events");
 let cityData;
 let Data;
 const fs = require("fs");
 const bodyParser = require("body-parser");
 const http = require("http");
 const path = require("path");
-
 var express = require("express");
 var app = express();
 app.use(bodyParser.json());
+const { timeForOneCity } = require("./timeZone.js");
 
 //To get all the details of the cities
 app.get("/all-timezone-cities", (req, res) => {
@@ -24,14 +25,12 @@ app.get("/all-timezone-cities", (req, res) => {
 app.get("/", (req, res) => {
   var cityName = req.query.city;
   if (cityName) {
-    let cityInfo = fork(__dirname + "/alltimezonedata.js");
-    cityInfo.on("message", (cityData) => {
+    let cityInfo = new eventEmitter();
+    cityInfo.on("GetcityInfo", () => {
+      cityData = timeForOneCity(cityName);
       res.json(cityData);
     });
-    cityInfo.send({
-      messagename: "GetcityInfo",
-      messagebody: { cityname: cityName },
-    });
+    cityInfo.emit("GetcityInfo");
   } else if (req.url.endsWith("/")) {
     app.use(express.static("./"));
     res.sendFile(__dirname + "/index.html");
