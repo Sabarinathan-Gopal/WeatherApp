@@ -20,9 +20,7 @@ window.addEventListener("resize", resizeChange);
 function middleSectionAsync() {
   var icon = "sunnyIcon";
   try {
-    summerCountries = Object.values(
-      middleSectionObj.setResponseDataFunction()
-    ).filter(
+    summerCountries = Object.values(totalDetails).filter(
       (city) =>
         Number(
           city.precipitation.substring(0, city.precipitation.length - 1)
@@ -46,17 +44,24 @@ function middleSectionAsync() {
   document
     .getElementById("icon1")
     .setAttribute("style", "border-bottom-style: solid");
-  for (let valuej = 0; valuej < summerCountries.length; valuej++) {
-    var clone = elementCard.cloneNode(true);
-    clone.id = "city-card" + valuej;
-    document.getElementById("total-cards").appendChild(clone);
-    midcardUpdateValues(clone, summerCountries, valuej, icon);
+  if (summerCountries.length < currentInputValue) {
+    initializeFunc(summerCountries.length, icon);
+  } else {
+    initializeFunc(currentInputValue, icon);
   }
   currentSummerValue = currentInputValue;
   displayList = summerCountries;
   resizeChange();
 }
 
+function initializeFunc(loopValue, icon) {
+  for (let valuej = 0; valuej < loopValue; valuej++) {
+    var clone = elementCard.cloneNode(true);
+    clone.id = "city-card" + valuej;
+    document.getElementById("total-cards").appendChild(clone);
+    midcardUpdateValues(clone, summerCountries, valuej, icon);
+  }
+}
 /**
  *Async Await function to perform step by step operation
  */
@@ -141,9 +146,7 @@ async function midScroll(val) {
 function summerFunction() {
   resizeChange();
   var icon = "sunnyIcon";
-  summerCountries = Object.values(
-    middleSectionObj.setResponseDataFunction()
-  ).filter(
+  summerCountries = Object.values(totalDetails).filter(
     (city) =>
       Number(city.precipitation.substring(0, city.precipitation.length - 1)) >=
         50 &&
@@ -202,7 +205,7 @@ function summerFunction() {
       }
     }
   } else if (summerCountries.length < 3) {
-    for (let valuej = 0; valuej < summerCountries.length; valuej++) {
+    for (let valuej = 0; valuej < currentInputValue; valuej++) {
       var clone = elementCard.cloneNode(true);
       clone.id = "city-card" + valuej;
       document.getElementById("total-cards").appendChild(clone);
@@ -218,7 +221,7 @@ function summerFunction() {
  */
 function winterFunction() {
   var icon = "snowflakeIcon";
-  winterCountries = Object.values(totalJsonfile).filter(
+  winterCountries = Object.values(totalDetails).filter(
     (city) =>
       Number(city.precipitation.substring(0, city.precipitation.length - 1)) <
         50 &&
@@ -296,9 +299,7 @@ function winterFunction() {
  */
 function rainyFunction() {
   var icon = "rainyIcon";
-  rainyCountries = Object.values(
-    middleSectionObj.setResponseDataFunction()
-  ).filter(
+  rainyCountries = Object.values(totalDetails).filter(
     (city) =>
       Number(city.humidity.substring(0, city.humidity.length - 1)) >= 50 &&
       Number(city.temperature.substring(0, city.temperature.length - 2)) < 20
@@ -394,12 +395,12 @@ function midcardUpdateValues(val, currentCountry, index, icon) {
     .querySelector("#city-card-image")
     .setAttribute(
       "style",
-      "background-image: url('./Assets/HTML & CSS/Icons for cities/" +
+      "background-image: url('./Assets/HTML_&_CSS/Icons_for_cities/" +
         currentCity +
         ".svg')"
     );
   val.querySelector("#middle-temp-icon").src =
-    "./Assets/HTML & CSS/Weather Icons/" + icon + ".svg";
+    "./Assets/HTML_&_CSS/Weather_Icons/" + icon + ".svg";
   val.querySelector("#middle-city-name").innerText =
     middleSectionObj.getCityName();
   val.querySelector("#middle-temperature").innerText =
@@ -411,7 +412,7 @@ function midcardUpdateValues(val, currentCountry, index, icon) {
   clearInterval(timer1);
   timer1 = setInterval(mytimer1, 500);
   function mytimer1() {
-    middleSectionObj.setTimeZone(totalJsonfile[currentCity].timeZone);
+    middleSectionObj.setTimeZone(currentCountry[index].timeZone);
     currentTimezone = new Date().toLocaleString("en-US", {
       timeZone: middleSectionObj.getTimeZone(),
     });
@@ -459,7 +460,7 @@ function resizeChange() {
   let cardWidth = document.getElementById("card-container").clientWidth;
   let cardCount = displayList.length;
   let count = cardCount < currentInputValue ? cardCount : currentInputValue;
-  if (cardWidth < count * 280 + 20) {
+  if (cardWidth < count * 282 + 20) {
     document
       .getElementById("total-cards")
       .setAttribute("style", "justify-content: none");

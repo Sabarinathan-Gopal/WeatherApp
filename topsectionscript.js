@@ -1,3 +1,6 @@
+document
+  .querySelector("#city-option")
+  .addEventListener("change", totalCityWeather);
 var date = new Date().toJSON();
 let timer;
 var optionBox = document.getElementById("city-option");
@@ -6,36 +9,21 @@ let totalDetails;
 let timeLine;
 
 /**
- *To set the values that was fetched from the Postman
- */
-const getTotalCityDetails = async () => {
-  fetch("https://soliton.glitch.me/all-timezone-cities")
-    .then((response) => {
-      return response.json();
-    })
-    .then(async (responseData) => {
-      totalDetails = responseData;
-      await optionValues();
-      console.log(totalDetails);
-      totalCityWeather("Nome");
-    });
-};
-
-/**
- *Calls this function to check the selection box value and assigns the value
- */
-const myFunction = async () => {
-  await timeLog(optionBox.value);
-  totalCityWeather(optionBox.value);
-};
-
-/**
  *Async Await function to perform step by step operation
  */
 const asyncAwait = async () => {
-  await timeLog("Nome");
-  await getTotalCityDetails();
-  optionBox.addEventListener("change", myFunction);
+  //await timeLog("Nome");
+  await getCityDetails();
+  var cityOptionbox = document.getElementById("city-options");
+  for (var value in totalDetails) {
+    cityOptionbox.innerHTML =
+      cityOptionbox.innerHTML +
+      '<option value="' +
+      totalDetails[value].cityName +
+      '">';
+  }
+  optionBox.value = "Nome";
+  totalCityWeather();
 };
 
 (function () {
@@ -111,29 +99,16 @@ class cityFunction {
 }
 
 /**
- *To get the values to the Option Dropdown Box
- */
-const optionValues = async () => {
-  var cityOptionbox = document.getElementById("city-options");
-  for (var city in totalJsonfile) {
-    cityOptionbox.innerHTML =
-      cityOptionbox.innerHTML +
-      '<option value="' +
-      totalJsonfile[city].cityName +
-      '">';
-  }
-};
-
-/**
  *To check whether the city selected is present in the JS file
  *Calling the function topSector to perform the remaining functions
  * @param {string} cities
  */
-function totalCityWeather(cities) {
+function totalCityWeather() {
+  cities = optionBox.value;
   let found = false;
   let indexValue;
-  for (let value in totalJsonfile) {
-    if (cities.toLowerCase() === value) {
+  for (let value in totalDetails) {
+    if (cities === totalDetails[value].cityName) {
       found = true;
     }
   }
@@ -180,12 +155,12 @@ function errorDisplay() {
   document.getElementById("value-style1").innerText = "";
   document.getElementById("value-style2").innerText = "";
   document.getElementById("time-state").src =
-    "./Assets/HTML & CSS/General Images & Icons/warning.svg";
+    "./Assets/HTML_&_CSS/General_Images_&_Icons/warning.svg";
   document
     .getElementById("city-seperate-image")
     .setAttribute(
       "style",
-      "background-image: url('./Assets/HTML & CSS/General Images & Icons/warning.svg')"
+      "background-image: url('./Assets/HTML_&_CSS/General_Images_&_Icons/warning.svg')"
     );
 }
 
@@ -194,18 +169,18 @@ function errorDisplay() {
  *To assign city details with the help of the JS file
  * @param {string} cities
  */
-function topSector(cities, indValue) {
+const topSector = async (cities, indValue) => {
+  let currentFiveHrs;
   cityObject = new cityFunction();
-  cityObject.setTotalValues(totalJsonfile);
-  cityObject.setCityName(totalJsonfile[cities.toLowerCase()].cityName);
-  cityObject.setDateAndTime(totalJsonfile[cities.toLowerCase()].dateAndTime);
+  cityObject.setTotalValues(totalDetails);
+  cityObject.setCityName(totalDetails[indValue].cityName);
+  cityObject.setDateAndTime(totalDetails[indValue].dateAndTime);
   cityObject.setTemperature(totalDetails[indValue].temperature);
   cityObject.setHumidity(totalDetails[indValue].humidity);
-  cityObject.setNextFiveHrs(timeFiveHrs.temperature);
-  cityObject.setTimeZone(totalJsonfile[cities.toLowerCase()].timeZone);
-  cityObject.setPrecipitation(
-    totalJsonfile[cities.toLowerCase()].precipitation
-  );
+  await timeLog(totalDetails[indValue].cityName);
+  cityObject.setNextFiveHrs(timeFiveHrs);
+  cityObject.setTimeZone(totalDetails[indValue].timeZone);
+  cityObject.setPrecipitation(totalDetails[indValue].precipitation);
   var tempCelsius = document.getElementById("temperature-celsius");
   var tempFarenheit = document.getElementById("temperature-farenheit");
   var tempCurrent = document.getElementById("current-time");
@@ -215,7 +190,7 @@ function topSector(cities, indValue) {
   tempCelsius.innerText = cityObject.getTemperature();
   var actualCeliusval = tempCelsius.innerText.substring(
     0,
-    tempCelsius.innerText.indexOf("C") - 1
+    tempCelsius.innerText.indexOf("°")
   );
   var currenTime = document.getElementById("current-time");
   var currentSeconds = document.getElementById("subscript-seconds");
@@ -232,10 +207,10 @@ function topSector(cities, indValue) {
     currentHours = new Date(currentTimezone).getHours() % 12;
     if (new Date(currentTimezone).getHours() >= 12) {
       document.getElementById("time-state").src =
-        "./Assets/HTML & CSS/General Images & Icons/pmState.svg";
+        "./Assets/HTML_&_CSS/General_Images_&_Icons/pmState.svg";
     } else {
       document.getElementById("time-state").src =
-        "./Assets/HTML & CSS/General Images & Icons/amState.svg";
+        "./Assets/HTML_&_CSS/General_Images_&_Icons/amState.svg";
     }
     const date = new Date(currentTimezone).getDate();
     currentDate.innerText =
@@ -269,9 +244,9 @@ function topSector(cities, indValue) {
   tempFarenheit.innerText = parseFloat(
     (actualCeliusval * 9) / 5 + 32 + " F"
   ).toFixed(1);
-  tempCelsius.innerText = tempCelsius.innerText.slice(
+  tempCelsius.innerText = tempCelsius.innerText.substring(
     0,
-    tempCelsius.innerText.length - 2
+    tempCelsius.innerText.indexOf("°")
   );
   tempImage(tempCelsius.innerText, currentImagei);
   document.getElementById("timecurrent").innerText =
@@ -282,13 +257,13 @@ function topSector(cities, indValue) {
     .getElementById("city-seperate-image")
     .setAttribute(
       "style",
-      "background-image: url('./Assets/HTML & CSS/Icons for cities/" +
+      "background-image: url('./Assets/HTML_&_CSS/Icons_for_cities/" +
         cities +
         ".svg')"
     );
   var currentHour = new Date(currentTimezone).getHours();
   tempFunction(currentHour, cities);
-}
+};
 
 /**
  *To set the timestamp for the next five hours
@@ -318,7 +293,10 @@ function tempFunction(currentHour, cities) {
     } else {
       temphour.innerText = cityObject
         .getNextFiveHrs()
-        [valuei].slice(0, cityObject.getNextFiveHrs()[valuei].length - 2);
+        .temperature[count].slice(
+          0,
+          cityObject.getNextFiveHrs().temperature[count].length - 2
+        );
     }
     tempImage(temphour.innerText, currentImage);
   }
@@ -331,15 +309,15 @@ function tempFunction(currentHour, cities) {
  */
 function tempImage(temperature, currentImage) {
   if (temperature >= 23 && temperature <= 29) {
-    currentImage.src = "./Assets/HTML & CSS/Weather Icons/cloudyIcon.svg";
+    currentImage.src = "./Assets/HTML_&_CSS/Weather_Icons/cloudyIcon.svg";
   }
   if (temperature >= 18 && temperature <= 22) {
-    currentImage.src = "./Assets/HTML & CSS/Weather Icons/windyIcon.svg";
+    currentImage.src = "./Assets/HTML_&_CSS/Weather_Icons/windyIcon.svg";
   }
   if (temperature < 18) {
-    currentImage.src = "./Assets/HTML & CSS/Weather Icons/rainyIcon.svg";
+    currentImage.src = "./Assets/HTML_&_CSS/Weather_Icons/rainyIcon.svg";
   }
   if (temperature > 29) {
-    currentImage.src = "./Assets/HTML & CSS/Weather Icons/sunnyIcon.svg";
+    currentImage.src = "./Assets/HTML_&_CSS/Weather_Icons/sunnyIcon.svg";
   }
 }
