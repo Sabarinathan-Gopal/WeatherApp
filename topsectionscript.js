@@ -12,7 +12,6 @@ let timeLine;
  *Async Await function to perform step by step operation
  */
 const asyncAwait = async () => {
-  //await timeLog("Nome");
   await getCityDetails();
   var cityOptionbox = document.getElementById("city-options");
   for (var value in totalDetails) {
@@ -26,8 +25,25 @@ const asyncAwait = async () => {
   totalCityWeather();
 };
 
+/**
+ *To reload the topsection with 4 hours of span to update the next five hours
+ */
+const timeChange = async () => {
+  await getCityDetails();
+  var cityOptionbox = document.getElementById("city-options");
+  for (var value in totalDetails) {
+    cityOptionbox.innerHTML =
+      cityOptionbox.innerHTML +
+      '<option value="' +
+      totalDetails[value].cityName +
+      '">';
+  }
+  totalCityWeather();
+};
+
 (function () {
   asyncAwait();
+  setInterval(timeChange, 14400000);
 })();
 
 class cityFunction {
@@ -271,33 +287,28 @@ const topSector = async (cities, indValue) => {
  * @param {string} cities
  */
 function tempFunction(currentHour, cities) {
-  for (let valuei = 0; valuei < 5; valuei++) {
-    var timelog = document.getElementById("timelog" + valuei);
-    var temphour = document.getElementById("time" + valuei);
-    var currentImage = document.getElementById("current-image" + valuei);
-    if (Number(currentHour) + valuei + 1 > 24) {
+  for (let count = 0; count < 5; count++) {
+    var timelog = document.getElementById("timelog" + count);
+    if (Number(currentHour) + count + 1 > 24) {
       currentHour = currentHour - 24;
     }
-    if (Number(currentHour) + valuei + 1 < 12) {
-      timelog.innerText = Number(currentHour) + (valuei + 1) + "AM";
-    } else if (Number(currentHour) + valuei + 1 === 12) {
-      timelog.innerText = Number(currentHour) + (i + 1) + "PM";
-    } else if (Number(currentHour) + valuei + 1 === 24) {
+    if (Number(currentHour) + count + 1 < 12) {
+      timelog.innerText = Number(currentHour) + (count + 1) + "AM";
+    } else if (Number(currentHour) + count + 1 === 12) {
+      timelog.innerText = Number(currentHour) + (count + 1) + "PM";
+    } else if (Number(currentHour) + count + 1 === 24) {
       timelog.innerText = 12 + "AM";
     } else {
-      timelog.innerText = Number(currentHour) + (valuei + 1) - 12 + "PM";
+      timelog.innerText = Number(currentHour) + (count + 1) - 12 + "PM";
     }
-
-    if (valuei === 4) {
-      temphour.innerText = 2;
-    } else {
-      temphour.innerText = cityObject
-        .getNextFiveHrs()
-        .temperature[count].slice(
-          0,
-          cityObject.getNextFiveHrs().temperature[count].length - 2
-        );
-    }
+    var temphour = document.getElementById("time" + count);
+    temphour.innerText = cityObject
+      .getNextFiveHrs()
+      .temperature[count].slice(
+        0,
+        cityObject.getNextFiveHrs().temperature[count].length - 2
+      );
+    var currentImage = document.getElementById("current-image" + count);
     tempImage(temphour.innerText, currentImage);
   }
 }
